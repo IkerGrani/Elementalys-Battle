@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Elementalys Beasts: Battle</title>
+        <link rel="icon" href="assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
+        <link rel="stylesheet" href="styles/menu.css">
+    </head>
+
+    <!-- Menu Principal -->
+    <body>
+        
+        <!-- Capa de Fondo Dinámico -->
+        <div class="menu-background"></div>
+
+        <!-- Encabezado Principal -->
+        <header>
+            <div class="logo-container">
+                <img src="assets/images/icons/Elementalys Beasts - Logo.png" alt="Brazalete Sendokai" id="logo">
+            </div>
+            <div class="title-container">
+                <h1>Elementalys Beasts</h1>
+                <h2>Battle</h2>
+            </div>
+        </header>
+
+        <!-- Navegación y Botones del Menú -->
+        <nav>
+            <button class="btn-menu btn-primary" id="btn-play">
+                <span class="btn-icon">⚔️</span> LUCHAR 
+            </button>
+            <button class="btn-menu" id="btn-beasts">
+                <span class="btn-icon">🐾</span> BEASTS
+            </button>
+            <button class="btn-menu" id="btn-options">
+                <span class="btn-icon">⚙️</span> OPCIONES
+            </button>
+        </nav>
+
+        <!-- Panel Lateral (Información de Jugador) -->
+        <aside class="player-panel">
+            <div class="panel-header">
+                <h3>SINTONIZADOR</h3>
+            </div>
+            <div class="player-profile">
+                <div class="avatar-slot">
+                    <span class="rank-badge">Nvl. 12</span>
+                </div>
+                <div class="player-info">
+                    <p class="player-name">Jugador 1</p>
+                    <p class="element-affinity">Afinidad: <span class="affinity-tag agl">AGL</span></p>
+                </div>
+            </div>
+            
+            <div class="stats-overview">
+                <div class="stat-item">
+                    <span>Gemas:</span>
+                    <span class="stat-value">💎 450</span>
+                </div>
+                <div class="stat-item">
+                    <span>Fragmentos:</span>
+                    <span class="stat-value">✨ 120</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Sección Central (Vista Previa / Mapa de Ascenso) -->
+        <section class="main-content">
+            <div class="ascent-preview-card">
+                <h3>MODO ASCENSO ROGUE</h3>
+                <p>Nivel Actual: <strong>Piso 4 - Altar del Viento</strong></p>
+                <div class="element-indicators">
+                    <span class="gem-slot agl" title="AGL - Agil"></span>
+                    <span class="gem-slot str" title="STR - Fuerte"></span>
+                    <span class="gem-slot teq" title="TEQ - Tecnico"></span>
+                    <span class="gem-slot phy" title="PHY - Fisico"></span>
+                    <span class="gem-slot int" title="INT - Integencia"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pie de Página -->
+        <footer>
+            <p>Elementalys Beasts: Battle &copy; 2026 - Versión Alpha 1.0</p>
+        </footer>
+
+    </body>
+
+</html>
