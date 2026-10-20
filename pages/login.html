@@ -5,8 +5,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Elementalys Beasts: Battle</title>
-        <link rel="icon" href="assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
-        <link rel="stylesheet" href="styles/menu.css">
+        <link rel="icon" href="../assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
+        <link rel="stylesheet" href="../styles/menu.css">
+        <link rel="stylesheet" href="../styles/login.css">
+        <script src="../src/login.js" defer></script>
     </head>
 
     <!-- Menu Principal -->
@@ -18,14 +20,51 @@
         <!-- Encabezado Principal -->
         <header>
             <div class="logo-container">
-                <img src="assets/images/icons/Elementalys Beasts - Logo.png" alt="Brazalete Sendokai" id="logo">
+                <img src="../assets/images/icons/Elementalys Beasts - Logo.png" alt="Brazalete Sendokai" id="logo">
             </div>
             <div class="title-container">
                 <h1>Elementalys Beasts</h1>
                 <h2>Battle</h2>
             </div>
         </header>
+        
+        <section class="main-content">
+            <div id="formulario">
+                <div id="mostrar-formulario">
+                    <button type="button" id="mostrar-login" class="btnFormulario activo">Login</button>
+                    <button type="button" id="mostrar-registro" class="btnFormulario">Registrarse</button>
+                </div>
 
+                <form id="form-login" action="" method="post">
+                    <label for="usuario-login">Usuario</label>
+                    <input type="text" id="usuario-login" name="usuario">
+
+                    <label for="passwd-login">Contraseña</label>
+                    <input type="password" id="passwd-login" name="passwd">
+
+                    <button type="submit" class="btnLogin">Login</button>
+                </form>
+
+                <form id="form-registro" action="" method="post" hidden>
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre">
+
+                    <label for="mail">Correo electrónico</label>
+                    <input type="email" id="mail" name="mail">
+
+                    <label for="usuario-registro">Usuario</label>
+                    <input type="text" id="usuario-registro" name="usuario">
+
+                    <label for="passwd-registro">Contraseña</label>
+                    <input type="password" id="passwd-registro" name="passwd">
+
+                    <label for="passwd2">Confirmar contraseña</label>
+                    <input type="password" id="passwd2" name="passwd2">
+
+                    <button type="submit" class="btnLogin">Registrarse</button>
+                </form>
+            </div>
+        </section>
 
         <!-- Pie de Página -->
         <footer>

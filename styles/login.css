@@ -1,0 +1,105 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#formulario {
+    display: flex;
+    flex-direction: column;
+    width: 25em;
+    background-color: #0d182e;
+    border: 2px solid #1e3a66;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#mostrar-formulario {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.btnFormulario {
+    width: 100%;
+    flex: 1;
+    padding: 12px;
+    color: #fff;
+    background-color: #0d182e;
+    border: none;
+    cursor: pointer;
+}
+
+/* El botón del formulario visible */
+.btnFormulario.activo {
+    background-color: #0d182e;
+}
+
+/* El botón del formulario oculto */
+.btnFormulario:not(.activo) {
+    background-color: #09101f;
+    color: #71809a;
+}
+
+.main-content form {
+    padding: 5%;
+}
+
+.main-content form {
+    padding: 5%;    
+}
+
+.main-content form label,
+.main-content form input {
+    display: block;
+}
+
+.main-content form input {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.main-content > div {
+    display: flex;
+    flex-direction: row;
+    width: 25em;
+}
+
+.main-content > div button {
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #00d2ff;
+}
+
+input:not([type="submit"]) {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.7rem;
+    color: #ffffff;
+    background-color: #060712;
+    border: 1px solid #1e3a66;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    color: #ffffff;
+    background-color: #0d182e;
+    border: 2px solid #00d2ff;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #005b7f;
+    border-color: #00d2ff;
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+}
