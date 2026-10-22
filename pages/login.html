@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="../styles/login.css">
         <!-- Fin Styles -->
 
-        <script src="../src/login.js" defer></script>
+        <script src="../src/login.js" type="module"></script>
     </head>
 
     <!-- Menu Principal -->
@@ -40,9 +40,9 @@
                     <button type="button" id="mostrar-registro" class="btnFormulario">Registrarse</button>
                 </div>
 
-                <form id="form-login" action="" method="post">
+                <form id="form-login">
                     <label for="usuario-login">Usuario</label>
-                    <input type="text" id="usuario-login" name="usuario">
+                    <input type="email" id="usuario-login" name="usuario">
 
                     <label for="passwd-login">Contraseña</label>
                     <input type="password" id="passwd-login" name="passwd">
@@ -50,7 +50,7 @@
                     <button type="submit" class="btnLogin">Login</button>
                 </form>
 
-                <form id="form-registro" action="" method="post" hidden>
+                <form id="form-registro" hidden>
                     <label for="nombre">Nombre</label>
                     <input type="text" id="nombre" name="nombre">
 
