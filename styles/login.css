@@ -8,8 +8,8 @@
     display: flex;
     flex-direction: column;
     width: 25em;
-    background-color: #0d182e;
-    border: 2px solid #1e3a66;
+    background-color: var(--fondo);
+    border: 2px solid var(--borde);
     border-radius: 8px;
     overflow: hidden;
 }
@@ -24,21 +24,21 @@
     width: 100%;
     flex: 1;
     padding: 12px;
-    color: #fff;
-    background-color: #0d182e;
+    color: var(--texto);
+    background-color: var(--fondo);
     border: none;
     cursor: pointer;
 }
 
 /* El botón del formulario visible */
 .btnFormulario.activo {
-    background-color: #0d182e;
+    background-color: var(--fondo);
 }
 
 /* El botón del formulario oculto */
 .btnFormulario:not(.activo) {
-    background-color: #09101f;
-    color: #71809a;
+    background-color: var(--fondo-activo);
+    color: var(--texto-inactivo);
 }
 
 .main-content form {
@@ -72,25 +72,25 @@
 label {
     display: block;
     margin-bottom: 0.4rem;
-    color: #00d2ff;
+    color: var(--color-label);
 }
 
 input:not([type="submit"]) {
     width: 100%;
     margin-bottom: 1rem;
     padding: 0.7rem;
-    color: #ffffff;
-    background-color: #060712;
-    border: 1px solid #1e3a66;
+    color: var(--texto);
+    background-color: var(--fondo-input);
+    border: 1px solid var(--borde-input);
     border-radius: 4px;
 }
 
 button[type="submit"] {
     width: 100%;
     padding: 0.8rem;
-    color: #ffffff;
-    background-color: #0d182e;
-    border: 2px solid #00d2ff;
+    color: var(--texto);
+    background-color: var(--fondo);
+    border: 2px solid var(--borde-submit);
     border-radius: 4px;
     font-family: inherit;
     font-weight: bold;
@@ -99,7 +99,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #005b7f;
-    border-color: #00d2ff;
-    box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+    background-color: var(--fondo-submit-hover);
+    border-color: var(--borde-submit);
+    box-shadow: 0 0 10px var(--submit-shadow);
 }
