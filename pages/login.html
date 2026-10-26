@@ -13,7 +13,8 @@
         <link rel="stylesheet" href="../styles/login.css">
         <!-- Fin Styles -->
 
-        <script src="../src/login.js" type="module"></script>
+        <script src="../src/login/formulario.js" defer></script>
+        <script src="../src/login/login.js" type="module"></script>
     </head>
 
     <!-- Menu Principal -->
@@ -34,6 +35,7 @@
         </header>
         
         <section class="main-content">
+
             <div id="formulario">
                 <div id="mostrar-formulario">
                     <button type="button" id="mostrar-login" class="btnFormulario activo">Login</button>
@@ -41,7 +43,7 @@
                 </div>
 
                 <form id="form-login">
-                    <label for="usuario-login">Usuario</label>
+                    <label for="usuario-login">Correo electrónico</label>
                     <input type="email" id="usuario-login" name="usuario">
 
                     <label for="passwd-login">Contraseña</label>
@@ -51,20 +53,20 @@
                 </form>
 
                 <form id="form-registro" hidden>
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" name="nombre">
-
-                    <label for="mail">Correo electrónico</label>
-                    <input type="email" id="mail" name="mail">
-
-                    <label for="usuario-registro">Usuario</label>
+                    <label for="usuario-registro">Usuario*</label>
                     <input type="text" id="usuario-registro" name="usuario">
 
-                    <label for="passwd-registro">Contraseña</label>
+                    <label for="mail">Correo electrónico*</label>
+                    <input type="email" id="mail" name="mail">
+
+                    <label for="passwd-registro">Contraseña*</label>
                     <input type="password" id="passwd-registro" name="passwd">
 
-                    <label for="passwd2">Confirmar contraseña</label>
+                    <label for="passwd2">Confirmar contraseña*</label>
                     <input type="password" id="passwd2" name="passwd2">
+
+                    <label for="fecha-nacimiento">Fecha de Nacimiento</label>
+                    <input type="date" id="fecha-nacimiento" name="fechaNacimiento">
 
                     <button type="submit" class="btnLogin">Registrarse</button>
                 </form>
