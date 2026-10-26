@@ -1,38 +1,172 @@
-body{
-    grid-template-areas:
-    "header header header"
-    "nav    main   aside"
-    "footer footer footer";
+/* ===== COMBAT — Layout en grid (override del grid del menú) ===== */
+body {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr auto auto auto;
+  grid-template-areas:
+    "header header"
+    "battle battle"
+    "battle battle"
+    "control control"
+    "log team"
+    "footer footer";
+  gap: 12px;
+  padding: 12px;
 }
 
-.interfaz_combate{
-    display: flex;
-    flex-direction: column;
-    width: 25em;
-    background-color: var(--fondo);
-    border: 2px solid var(--borde);
-    border-radius: 8px;
-    overflow: hidden; 
+header { grid-area: header; }
+footer { grid-area: footer; }
+
+/* ===== CAMPO DE BATALLA (estilo Pokémon) ===== */
+#battle {
+  grid-area: battle;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    ". enemy"
+    "player .";
+  gap: 10px;
+  background: var(--fondo);
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 340px;
+}
+
+.creature-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--fondo-panel);
+}
+
+.enemy { grid-area: enemy; align-self: end; }
+.player { grid-area: player; align-self: start; }
+
+.creature-img {
+  width: 100%;
+  max-width: 170px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 6px var(--logo-shadow));
+}
+
+.creature-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid var(--borde-gema);
+  box-shadow: 0 0 12px currentColor;
+}
+.creature-placeholder.agl  { background: var(--fondo-gema-agilidad);   color: var(--texto-afinidad-agilidad); }
+.creature-placeholder.str { background: var(--fondo-gema-fuerza);     color: #ff8a8a; }
+.creature-placeholder.teq { background: var(--fondo-gema-tecnica);    color: #ffe08a; }
+.creature-placeholder.phy { background: var(--fondo-gema-fisico);     color: #cfd8e0; }
+.creature-placeholder.int { background: var(--fondo-gema-inteligencia); color: #cc8aff; }
+
+.creature-name {
+  font-weight: bold;
+  color: var(--texto-header);
+  text-shadow: 0 0 6px var(--header-shadow);
+}
+
+.creature-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  font-size: 0.8rem;
+}
+
+.hp-bar {
+  flex: 1;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+}
+
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  transition: width 0.4s ease;
+}
+.hp-fill.low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+
+/* ===== CONTROL (evento a la izquierda, opciones a la derecha) ===== */
+#control {
+  grid-area: control;
+  display: flex;
+  flex-direction: row;
+  min-height: 70px;
+}
+
+#evento {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--fondo-panel);
+  border: 2px solid var(--borde);
+  border-radius: 8px 0 0 8px;
+  color: var(--texto-panel-destacado);
+  font-style: italic;
+}
+
+#opciones {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px;
+  background: var(--fondo-panel);
+  border: 2px solid var(--borde);
+  border-radius: 0 8px 8px 0;
 }
 
 .btnCombate {
-    width: 100%;
-    padding: 0.8rem;
-    color: var(--texto);
-    background-color: var(--fondo);
-    border: 2px solid var(--borde-submit);
-    border-radius: 4px;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s ease;
+  width: 100%;
+  padding: 0.8rem;
+  color: var(--texto);
+  background-color: var(--fondo);
+  border: 2px solid var(--borde-submit);
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.btnCombate:hover:not(:disabled) {
+  background: var(--fondo-submit-hover);
+  box-shadow: 0 0 8px var(--submit-shadow);
+}
+.btnCombate:disabled { opacity: 0.4; cursor: default; }
+
+/* ===== LOG (izquierda) y TEAM (derecha) ===== */
+#log {
+  grid-area: log;
+  background: var(--fondo-panel);
+  border: 2px solid var(--borde);
+  border-radius: 8px 0 0 8px;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  min-height: 120px;
+  line-height: 1.4;
 }
 
-#battle {
-    height: 40vh;
-    width: 200vh;
-}
-
-#control {
-    flex-direction: row;
+#team {
+  grid-area: team;
+  background: var(--fondo-panel);
+  border: 2px solid var(--borde);
+  border-radius: 0 8px 8px 0;
+  padding: 10px;
+  min-height: 120px;
 }

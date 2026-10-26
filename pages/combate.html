@@ -6,22 +6,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Elementalys Beasts: Battle</title>
         <link rel="icon" href="../assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
-        
+
         <link rel="stylesheet" href="../styles/colores.css">
         <link rel="stylesheet" href="../styles/menu.css">
         <link rel="stylesheet" href="../styles/combate.css">
+        <script src="../src/combate.js" type="module"></script>
     </head>
 
-    <!-- Menu Principal -->
     <body>
-        
+
         <!-- Capa de Fondo Dinámico -->
         <div class="menu-background"></div>
 
         <!-- Encabezado Principal -->
         <header>
             <div class="logo-container">
-                <img src="../assets/images/icons/Elementalys Beasts - Logo.png" alt="Brazalete Sendokai" id="logo">
+                <img src="../assets/images/icons/Elementalys Beasts - Logo.png" alt="Elementalys Beasts" id="logo">
             </div>
             <div class="title-container">
                 <h1>Elementalys Beasts</h1>
@@ -29,32 +29,52 @@
             </div>
         </header>
 
-        <!-- Combate -->
-        <section>
-            <div id="battle" class="interfaz_combate">
-                <p>a</p>
-            </div>
+        <!-- CAMPO DE BATALLA -->
+        <div id="battle">
 
-            <div id="control" class="interfaz_combate">
-                <div id="evento">
-                    Uso Rayo
-                </div>
-                <div id="opciones">
-                    <div id="ataques" class="btnCombate">Luchar</div>
-                    <div id="atk1" class="btnCombate" hiddden>Rayo</div>
-                    <div id="atk2" class="btnCombate" hiddden>Placaje</div>
-                    <div id="cambiar" class="btnCombate">Cambiar</div>
+            <!-- Enemigo (arriba-derecha) -->
+            <div class="creature-window enemy">
+                <div class="creature-placeholder int"></div>
+                <span class="creature-name">Beast-01</span>
+                <div class="creature-stats">
+                    <span>HP</span>
+                    <div class="hp-bar"><div class="hp-fill"></div></div>
                 </div>
             </div>
 
-            <div id="log" class="interfaz_combate">
-                Hola
+            <!-- Jugador (abajo-izquierda) -->
+            <div class="creature-window player">
+                <div class="creature-placeholder agl"></div>
+                <span class="creature-name">Tu Beast</span>
+                <div class="creature-stats">
+                    <span>HP</span>
+                    <div class="hp-bar"><div class="hp-fill"></div></div>
+                </div>
             </div>
 
-            <div id="team" class="interfaz_combate" hidden>
-                1
+        </div>
+
+        <!-- CONTROL -->
+        <div id="control">
+            <div id="evento">El combate ha comenzado.</div>
+            <div id="opciones">
+                <div class="btnCombate" id="ataques">Luchar</div>
+                <div class="btnCombate" id="cambiar">Cambiar</div>
+                <div class="btnCombate" id="atk1" hidden>Rayo</div>
+                <div class="btnCombate" id="atk2" hidden>Placaje</div>
+                <div class="btnCombate" id="volver" hidden>Volver</div>
             </div>
-        </section>
+        </div>
+
+        <!-- LOG (izquierda) -->
+        <div id="log">
+            <p>Turno 1 — El combate ha comenzado.</p>
+        </div>
+
+        <!-- TEAM (derecha, oculto hasta cambiar) -->
+        <div id="team" hidden>
+            <p>Tu equipo:</p>
+        </div>
 
         <!-- Pie de Página -->
         <footer>
