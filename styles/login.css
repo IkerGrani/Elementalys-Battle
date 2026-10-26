@@ -1,0 +1,106 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#formulario {
+    display: flex;
+    flex-direction: column;
+    width: 25em;
+    background-color: var(--fondo);
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#mostrar-formulario {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.btnFormulario {
+    width: 100%;
+    flex: 1;
+    padding: 12px;
+    color: var(--texto);
+    background-color: var(--fondo);
+    border: none;
+    cursor: pointer;
+}
+
+/* El botón del formulario visible */
+.btnFormulario.activo {
+    background-color: var(--fondo);
+}
+
+/* El botón del formulario oculto */
+.btnFormulario:not(.activo) {
+    background-color: var(--fondo-activo);
+    color: var(--texto-inactivo);
+}
+
+.main-content form {
+    padding: 5%;
+}
+
+.main-content form {
+    padding: 5%;    
+}
+
+.main-content form label,
+.main-content form input {
+    display: block;
+}
+
+.main-content form input {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.main-content > div {
+    display: flex;
+    flex-direction: row;
+    width: 25em;
+}
+
+.main-content > div button {
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--color-label);
+}
+
+input:not([type="submit"]) {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.7rem;
+    color: var(--texto);
+    background-color: var(--fondo-input);
+    border: 1px solid var(--borde-input);
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    color: var(--texto);
+    background-color: var(--fondo);
+    border: 2px solid var(--borde-submit);
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--fondo-submit-hover);
+    border-color: var(--borde-submit);
+    box-shadow: 0 0 10px var(--submit-shadow);
+}

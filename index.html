@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Elementalys Beasts: Battle</title>
         <link rel="icon" href="assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
+        <link rel="stylesheet" href="styles/colores.css">
         <link rel="stylesheet" href="styles/menu.css">
     </head>
 
@@ -29,7 +30,9 @@
         <!-- Navegación y Botones del Menú -->
         <nav>
             <button class="btn-menu btn-primary" id="btn-play">
-                <span class="btn-icon">⚔️</span> LUCHAR 
+                <a href="pages/combate.html">
+                    <span class="btn-icon">⚔️</span> LUCHAR 
+                </a>
             </button>
             <button class="btn-menu" id="btn-rank">
                 <span class="btn-icon">🏆</span> Rank
@@ -47,27 +50,13 @@
             <div class="panel-header">
                 <h3>SINTONIZADOR</h3>
             </div>
-            <div class="player-profile">
-                <div class="avatar-slot">
-                    <span class="rank-badge">Nvl. 12</span>
-                </div>
-                <div class="player-info">
-                    <p class="player-name">Jugador 1</p>
-                    <p class="element-affinity">Afinidad: <span class="affinity-tag agl">AGL</span></p>
-                </div>
+            <div class="player-profile" id="player-info-container">
+                <div class="avatar-slot"></div>
             </div>
-            
-            <div class="stats-overview">
-                <div class="stat-item">
-                    <span>Gemas:</span>
-                    <span class="stat-value">💎 450</span>
-                </div>
-                <div class="stat-item">
-                    <span>Fragmentos:</span>
-                    <span class="stat-value">✨ 120</span>
-                </div>
-            </div>
+            <div class="stats-overview" id="stats-overview-container"></div>
         </aside>
+
+        <script src="src/menu.js" defer></script>
 
         <!-- Sección Central (Vista Previa / Mapa de Ascenso) -->
         <section class="main-content">

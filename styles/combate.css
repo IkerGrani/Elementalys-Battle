@@ -1,0 +1,38 @@
+body{
+    grid-template-areas:
+    "header header header"
+    "nav    main   aside"
+    "footer footer footer";
+}
+
+.interfaz_combate{
+    display: flex;
+    flex-direction: column;
+    width: 25em;
+    background-color: var(--fondo);
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+    overflow: hidden; 
+}
+
+.btnCombate {
+    width: 100%;
+    padding: 0.8rem;
+    color: var(--texto);
+    background-color: var(--fondo);
+    border: 2px solid var(--borde-submit);
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#battle {
+    height: 40vh;
+    width: 200vh;
+}
+
+#control {
+    flex-direction: row;
+}
