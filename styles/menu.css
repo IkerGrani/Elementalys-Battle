@@ -200,6 +200,12 @@ aside {
   margin-bottom: 20px;
 }
 
+.player-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .avatar-slot {
   width: 50px;
   height: 50px;
@@ -236,6 +242,43 @@ aside {
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
+}
+
+.stat-item-center {
+  justify-content: center;
+}
+
+.stat-inactive-msg {
+  color: var(--texto-inactivo);
+  font-size: 0.8rem;
+}
+
+.btn-logout {
+  margin-top: 4px;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  background: var(--fondo);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  border-radius: 3px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: var(--fondo-menu-hover);
+  border-color: var(--borde-menu-hover);
+}
+
+.login-link {
+  color: var(--texto-tarjeta-destacado);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.login-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 /* ===== FOOTER ===== */

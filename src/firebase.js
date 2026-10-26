@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "https://esm.sh/firebase/app";
+import { getAnalytics } from "https://esm.sh/firebase/analytics";
+import { getAuth } from "https://esm.sh/firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCMjyZ5gMH57KmbtzHzebvUDKJhlDI7-sk",
@@ -13,3 +14,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+export const auth = getAuth(app);
