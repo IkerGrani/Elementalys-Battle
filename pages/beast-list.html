@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beasts List</title>
-    <link rel="icon" href="assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
+    <link rel="icon" href="../assets/images/icons/Elementalys Beasts - Logo.png" type="image/png">
     <link rel="stylesheet" href="../styles/colores.css">
     <link rel="stylesheet" href="../styles/beast-list.css">
 </head>
@@ -19,10 +19,30 @@
         </div>
     </header>
     <main>
-
+        <!-- Sección principal del catalogo/pokedex de las criaturas -->
+        <section class="beasts-catalog">
+            <!-- Encabezado de la sección: titulo -->
+            <header class="catalog-header">
+                <div class="catalog-header-left">
+                    <!-- Enlace a la pagina de inicio -->
+                    <a href="../index.html" class="btn-back" title="Volver al menú principal">
+                        <span>&#11013;</span> VOLVER
+                    </a>
+                    <h2>Catálogo de criaturas</h2>
+                </div>
+                <p class="catalog-counter">Hay un total de: <span id="beasts-count">0</span> criaturas</p>
+            </header>
+            <!-- Contenedor donde mediante JS se construira las tarjetas -->
+            <!-- aria-live="polite": Segun el estandar de accesibilidad, avisa a los lectores de 
+                pantalla que el contenido dentro de este contenedor puede cambiar dinamicamente -->
+            <div id="beasts-grid" class="beasts-grid" aria-live="polite"></div>
+        </section>
     </main>
     <footer>
-
+        <p>Elementalys Beasts: Battle &copy; 2026 - Versión Alpha 1.0</p>
     </footer>
+
+    <!-- JavaScript -->
+    <script src="../src/beasts-card.js"></script>
 </body>
 </html>

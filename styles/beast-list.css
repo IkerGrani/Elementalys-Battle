@@ -6,9 +6,44 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
-/* Temporal */
+/* ===== FONDO DE LA PAGINA (body) ===== */
 body {
-    background-color: #191c3a;
+    /* Fuerza al body a medir exactamente el 100% del ancho del viewport (ventana visible).
+       Nota: las etiquetas de bloque como <body> ya ocupan el 100% del ancho por defecto. */
+    width: 100vw;
+    /* Fija la altura minima del body al 100% del viweport.
+       Nota: Puede crecer mas si hace falta. */
+    min-height: 100vh;
+
+    /* Controla el contenido que se sale de las dimensiones fijadas:
+       - 'hidden' recorta y oculta cualquier elemento o margen que exceda el tamaño del body.
+       - Desactiva la aparicion de barras de desplazamiento vertical u horizontal. */
+    /*overflow: hidden;*/
+
+    background-color: var(--fondo-body);
+    /* Capas apiladas de fondo: la primera se dibuja arriba del todo y la última queda debajo */
+    background-image: 
+        /* Capa 1: Degradado vertical. Pinta 1px con el color de la línea
+           y deja los 15px restantes transparentes. Esto crea la raya horizontal */
+        linear-gradient(var(--fondo-cuadricula) 1px, transparent 1px),
+        /* Capa 2: Degradado girado 90 grados (horizontal). Pinta 1px de color
+           y el resto transparente. Esto crea la raya vertical */
+        linear-gradient(90deg, var(--fondo-cuadricula) 1px, transparent 1px),
+        /* Capa 3: Degradado radial en forma de círculo centrado.
+           Genera el efecto de iluminación: más claro en el centro (0%),
+           comienza a oscurecer al 70% y llega al tono más oscuro en los bordes (100%) */
+        radial-gradient(circle at center, var(--fondo-menu-1) 0%, var(--fondo-menu-2) 70%, var(--fondo-menu-3) 100%);
+    /* Define el tamaño de repetición para cada una de las 3 capas en el mismo orden:
+       - 16px 16px: la cuadrícula horizontal se repite en mosaicos de 16x16px
+       - 16px 16px: la cuadrícula vertical se repite en mosaicos de 16x16px
+       - 100% 100%: el degradado radial circular se estira para cubrir toda la pantalla sin repetirse */
+    background-size: 16px 16px, 16px 16px, 100% 100%;
+
+    /* Organizamos el layout en columna vertical: Header -> Main -> Footer */
+    display: flex;
+    flex-direction: column;
+
+    padding-bottom: 15px;
 }
 
 /* ===== HEADER ===== */
@@ -23,23 +58,44 @@ header {
 
     border: 2px solid var(--borde-header);
     border-radius: 8px;
-    /*box-shadow: [offset-x] [offset-y] [blur-radius] [spread-radius] [color];*/
+    /* Box-shadow: [offset-x] [offset-y] [blur-radius] [spread-radius] [color];*/
     box-shadow: 0 0 15px var(--header-shadow);
-
-    margin: 10px;
-    padding: 10px;
+    /* Altura definida para que quede igual que el index.html */
+    height: 120px;
+    margin: 15px;
+    padding: 10px 20px;
 
 }
 
+/* ===== HEADER LOGO ===== */
 #logo {
     width: 70px;
     height: 70px;
+
     object-fit: contain;
-    /*filter: drop-shadow(0 0 8px #00f0ff);
-    animation: floatLogo 3s ease-in-out infinite alternate;*/
+
+    /* Silueta transparente de la imagen/icono*/
+    filter: drop-shadow(0 0 8px #00f0ff);
+
+    /* Floatlogo: nombre | 3s: duracion | alternate: va y vuelve */
+    animation: floatLogo 3s ease-in-out infinite alternate;
 }
 
-.title-container h1,p {
+/* Animación del logo, efecto levitar */
+@keyframes floatLogo {
+    0% {
+        /* Sube 2px */
+        transform: translateY(-2px); 
+    }
+    100% {
+         /* Baja 4px */
+        transform: translateY(4px); 
+    }
+}
+
+/* ===== HEADER TITULO ===== */
+.title-container h1, 
+.title-container p {
     text-transform: uppercase;
 }
 
@@ -50,9 +106,280 @@ header {
 
 }
 
+/* ===== HEADER SUBTITULO ===== */
 .title-container p {
+    font-weight: bold;
     font-size: 1.1rem;
     letter-spacing: 4px;
 
     color: var(--texto-subtitulo-header);
+}
+
+/* ===== MAIN - CONTENIDO PRINCIPAL ===== */
+main {
+    /* Hace que el contenido central ocupe todo el espacio sobrante. */
+    flex: 1;
+}
+
+/* ===== SECCION CATALOGO ===== */
+.beasts-catalog {
+    width: 100%;
+    /* Limita el ancho maximo para unas 6 cartas 
+        para que en pantallas anchas no ocupen todo el ancho */
+    max-width: 1300px;
+
+    /* Centra el catalogo horizontalmente dentro del main */
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.catalog-header {
+    display: flex;
+    /* Alinea el primer elemento al inicio y el ultimo al final */
+    justify-content: space-between;
+    align-items: center;
+
+    /* Quitar borde, shadow y color de fondo*/
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+
+    padding-bottom: 10px;
+}
+
+/* Agrupamos el boton de volver y el titulo */
+.catalog-header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Boton de volver */
+.btn-back {
+    /* inline-flex: 
+        "Exteriormete" se comporta como inline
+        "Interiormente* se comporta como flex */
+    display: inline-flex;
+    align-items: center;
+
+    background-color: var(--fondo);
+    color: var(--texto-panel-destacado);
+
+    border: 2px solid var(--borde-panel-seccion);
+    border-radius: 4px;
+
+    
+    padding: 6px 14px;
+
+    /* Elimina el subrayado del enlace */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+/* Efecto al pasar el curso en el boton */
+.btn-back:hover {
+    background-color: var(--fondo-menu-hover);
+    color: var(--texto);
+    border-color: var(--borde-menu-hover);
+
+    /* Desplazamiento en el eje horizontal */
+    transform: translateX(-3px);
+}
+
+.catalog-header h2 {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    color: var(--texto-panel-destacado);
+}
+
+.catalog-counter {
+    font-size: 0.85rem;
+
+    color: var(--texto);
+}
+
+.catalog-counter span {
+    font-weight: bold;
+
+    color: var(--texto-tarjeta-destacado);
+}
+
+/* ===== REJILLA DE TARJETAS (GRID RESPONSIVE) ===== */
+.beasts-grid {
+    display: grid;
+    /* auto-fit: Se asegura que las columnas se distribuyan proporcionalmente.
+        minmax(TAMAÑO_MINIMO, TAMAÑO_MAXIMO) 
+        repeat(CANTIDAD, TAMAÑO)
+        auto-fit: Decide automaticamente cuantas columnas cabe */
+    /* auto-fit si se queire agregar mas criaturas : 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); */
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    gap: 25px;
+
+    padding-bottom: 20px;
+}
+
+/* ===== TARJETA INDIVIDUAL ===== */
+.beast-card {
+    background-color: var(--fondo-tarjeta);
+
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Efecto visual cuando se pasa el raton por encima (hover) de cada card */
+.beast-card:hover {
+    /* Desplaza el elemento en el eje vertical, en este caso hacia arriba */
+    transform: translateY(-3px);
+
+    border-color: var(--borde-header);
+
+    /* box-shadow: desplazamiento-X | desplazamiento-Y | desenfoque | expansion | color */
+    box-shadow: 0 0 20px var(--card-hover-shadow);
+}
+
+/* Cabecera interna: nombre de la criatura y atributo */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.beast-name {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+
+    color: var(--texto);
+}
+
+.beast-affinity {
+    font-weight: bold;
+    font-size: 0.85rem;
+
+    border-radius: 3px;
+    border: 1px solid var(--borde-gema);
+
+    padding: 2px 6px;
+
+    color: var(--card-text-color);
+}
+
+/* Colores dependiendo del atributo que tenga la criatura */
+.beast-affinity.agl { background-color: var(--fondo-gema-agilidad); }
+.beast-affinity.str { background-color: var(--fondo-gema-fuerza); }
+.beast-affinity.teq { background-color: var(--fondo-gema-tecnica); }
+.beast-affinity.phy { background-color: var(--fondo-gema-fisico); }
+.beast-affinity.int { background-color: var(--fondo-gema-inteligencia); }
+
+/* Marco contenedor de la imagen */
+.card-image-wrapper {
+    width: 100%;
+    height: 160px;
+
+    background-color: var(--fondo-avatar);
+
+    border: 1px solid var(--borde-panel-seccion);
+    border-radius: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Oculta la parte que queda fuera de los límites del contenedor */
+    overflow: hidden;
+}
+
+.beast-image {
+    /* Definimos el ancho y alto que la imagen no puede superar respecto a su contenedor*/
+    max-width: 90%;
+    max-height: 90%;
+
+    /* Intenta mostrar la imagen completa, manteniendo las proporciones originales */
+    object-fit: contain;
+
+    /* Añade una sombra a la imagen */
+    filter: drop-shadow(0 0 6px var(--logo-shadow));
+}
+
+/* Estadisticas de cada criatura (HP, ATK, DEF) */
+.card-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    background-color: var(--fondo-estadisticas);
+    color: var(--texto);
+
+    border-radius: 4px;
+    border: 1px solid var(--borde-panel-seccion);
+
+    padding: 8px 10px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+.stat-label .stat-value {
+    font-weight: bold;
+}
+
+/* Colores de cada estadistica diferente */
+.stat-value.hp  { color: var(--stat-hp); }
+.stat-value.atk { color: var(--stat-atk); }
+.stat-value.def { color: var(--stat-def); }
+
+/* ===== FOOTER ===== */
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Altura fija para que quede igual que en el grid original */
+    height: 40px;
+
+    font-size: 0.75rem;
+    color: var(--texto-footer);
+
+    /* Linea superior que separa el footer del contenido */
+    border-top: 1px solid var(--footer-border);
+}
+
+/* ===== RESPONSIVE ADAPTIVE (Media Queries) ===== */
+
+/* Menos de 900px: 2 columnas x 3 filas */
+@media (max-width: 900px) {
+    .beasts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+/* Menos de 600px: 1 columna x 6 filas */
+@media (max-width: 600px) {
+    .beasts-grid {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 15px;
+    }
+
+    .card-image-wrapper {
+        /* Pequeño ajuste en pantallas reducidas */
+        height: 140px;
+    }
 }

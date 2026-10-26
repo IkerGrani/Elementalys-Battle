@@ -1,0 +1,70 @@
+:root {
+    /* Principales */
+    --principal: #23241a;
+    --color-secundario: #e8c547;
+
+    /* Fondos */
+    --fondo-body: #060712;
+    --fondo-menu-1: #1a0b2e;
+    --fondo-menu-2: #090a14;
+    --fondo-menu-3: #030408;
+    --fondo-cuadricula: rgba(0, 240, 255, 0.04);
+    --fondo: #0d182e;
+    --fondo-activo: #09101f;
+    --fondo-header: rgba(13, 24, 46, 0.8);
+    --fondo-tarjeta: rgba(13, 24, 46, 0.6);
+    --fondo-panel: rgba(13, 24, 46, 0.7);
+    --fondo-menu-hover: #005b7f;
+    --fondo-menu-principal-hover: #004411;
+    --fondo-avatar: #111538;
+    --fondo-estadisticas: rgba(0, 0, 0, 0.3);
+    --fondo-insignia-rango: #ffcc00;
+    --fondo-gema-agilidad: #00ff66;
+    --fondo-gema-fuerza: #ff2244;
+    --fondo-gema-tecnica: #ffcc00;
+    --fondo-gema-fisico: #a0b0c0;
+    --fondo-gema-inteligencia: #aa22ff;
+
+    /* Textos */
+    --texto: #ffffff;
+    --texto-inactivo: #71809a;
+    --texto-header: #00ffff;
+    --texto-subtitulo-header: #aa22ff;
+    --texto-tarjeta-destacado: #ffcc00;
+    --texto-panel-destacado: #00d2ff;
+    --texto-insignia-rango: #000000;
+    --texto-menu-principal: #00ff66;
+    --texto-afinidad-agilidad: #00ff66;
+    --texto-footer: #6a7b9c;
+
+    /* Bordes */
+    --borde: #1e3a66;
+    --borde-header: #00d2ff;
+    --borde-input: #1e3a66;
+    --borde-submit: #00d2ff;
+    --borde-menu-hover: #00d2ff;
+    --borde-menu-principal: #00ff66;
+    --borde-gema: #ffffff;
+    --borde-panel-seccion: #1e3a66;
+
+    /* Formulario */
+    --color-label: #00d2ff;
+    --fondo-input: #060712;
+    --fondo-submit-hover: #005b7f;
+
+    /* Sombras y efectos */
+    --header-shadow: rgba(0, 210, 255, 0.3);
+    --logo-shadow: #00f0ff;
+    --submit-shadow: rgba(0, 210, 255, 0.4);
+    --menu-hover-shadow: rgba(0, 210, 255, 0.4);
+    --menu-principal-shadow: rgba(0, 255, 102, 0.5);
+    --footer-border: rgba(255, 255, 255, 0.05);
+
+    /* Tarjetas y Estadísticas */
+    --card-hover-shadow: rgba(0, 210, 255, 0.35);
+    --card-text-color: #000;
+    --stat-hp: #00ff66;
+    --stat-atk: #ff2244;
+    --stat-def: #00d2ff;
+
+}
