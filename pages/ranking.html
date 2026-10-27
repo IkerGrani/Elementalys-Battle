@@ -22,37 +22,46 @@
         <!-- Seccion princiapl del ranking -->
         <section class="ranking-section">
             <!-- Encabezado de la sección: titulo-->
-            <header class="ranking-section-header">
+            <header class="ranking-header">
                 <!-- Enlace a la pagina de inicio -->
-                <a href="../index.html" class="btn" title="Volver al menú principal">
+                <a href="../index.html" class="btn-action" title="Volver al menú principal">
                     <span>&#11013;</span> VOLVER
                 </a>
                 <!-- Titulo principal de la seccion -->
                 <h2>Top 10 jugadores</h2>
                 <!-- Boton para resetear/borrar el ranking -->
-                <button type="button" class="btn">RESET</button>
+                <button id="btn-reset-ranking" class="btn-action" type="button" title="Reiniciar datos del ranking">
+                    RESET
+                </button>
             </header>
-            <!-- Tabla del ranking -->
-            <table class="ranking-table">
-                <!-- Titulo de la tabla -->
-                <caption>Ranking</caption>
-                <thead>
-                    <tr>
-                        <th>Puesto</th>
-                        <th>Nombre</th>
-                        <th>Nº Victorias</th>
-                        <th>Fecha y hora</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Nombre</td>
-                        <td>50</td>
-                        <td>27/10/2026 17:20</td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Contenerdor para la tabla -->
+            <div class="table-container">
+                <!-- Tabla del ranking -->
+                <!-- aria-live="polite": Segun el estandar de accesibilidad, avisa a los lectores de 
+                pantalla que el contenido dentro de este contenedor puede cambiar dinamicamente -->
+                <table class="ranking-table" aria-live="polite">
+                    <!-- Titulo descriptivo para la tabla -->
+                    <caption>Ranking</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Puesto</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Nº Victorias</th>
+                            <th scope="col">Fecha y hora</th>
+                        </tr>
+                    </thead>
+                    <tbody class="ranking-table-body">
+                        <!-- Se agregara dinamicamente lso valores de la tabla mediante el DOM -->
+                        <!-- Datos de prueba -->
+                        <tr>
+                            <td>1</td>
+                            <td>Nombre</td>
+                            <td>50</td>
+                            <td>27/10/2026 17:20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
     <footer>
