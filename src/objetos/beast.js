@@ -7,6 +7,7 @@ export class Beast {
         this.vida = vida;
         this.ataque = ataque;
         this.defensa = defensa;
+        this.debilitado = false;
     }
 
     usarAtaque1() {

@@ -34,6 +34,7 @@ footer { grid-area: footer; }
 }
 
 .creature-window {
+  position: relative; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,9 +56,14 @@ footer { grid-area: footer; }
   filter: drop-shadow(0 0 6px var(--logo-shadow));
 }
 
-.creature-placeholder {
-  width: 120px;
-  height: 120px;
+.creature-tipe {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  align-content: center;
   border-radius: 50%;
   border: 2px solid var(--borde-gema);
   box-shadow: 0 0 12px currentColor;
@@ -102,7 +108,8 @@ footer { grid-area: footer; }
 /* ===== CONTROL (evento a la izquierda, opciones a la derecha) ===== */
 #control {
   grid-area: control;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   flex-direction: row;
   min-height: 70px;
 }
@@ -122,8 +129,8 @@ footer { grid-area: footer; }
 
 #opciones {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: row;
   gap: 8px;
   padding: 8px;
   background: var(--fondo-panel);
