@@ -4,7 +4,7 @@ const beastsData = [
         id: 1,
         name: "Beast 1",
         affinity: "agl",
-        image: "../assets/images/icons/Elementalys Beasts - Logo.png",
+        image: "../assets/images/icons/elementalys-beasts-logo.png",
         hp: "1,250",
         atk: 340,
         def: 210
@@ -13,7 +13,7 @@ const beastsData = [
         id: 2,
         name: "Beast 2",
         affinity: "str",
-        image: "../assets/images/icons/Elementalys Beasts - Logo.png",
+        image: "../assets/images/icons/elementalys-beasts-logo.png",
         hp: "1,400",
         atk: 390,
         def: 180
@@ -22,7 +22,7 @@ const beastsData = [
         id: 3,
         name: "Beast 3",
         affinity: "teq",
-        image: "../assets/images/icons/Elementalys Beasts - Logo.png",
+        image: "../assets/images/icons/elementalys-beasts-logo.png",
         hp: "1,100",
         atk: 420,
         def: 160
@@ -31,7 +31,7 @@ const beastsData = [
         id: 4,
         name: "Beast 4",
         affinity: "phy",
-        image: "../assets/images/icons/Elementalys Beasts - Logo.png",
+        image: "../assets/images/icons/elementalys-beasts-logo.png",
         hp: "1,800",
         atk: 280,
         def: 320
@@ -40,7 +40,7 @@ const beastsData = [
         id: 5,
         name: "Beast 5",
         affinity: "int",
-        image: "../assets/images/icons/Elementalys Beasts - Logo.png",
+        image: "../assets/images/icons/elementalys-beasts-logo.png",
         hp: "1,150",
         atk: 360,
         def: 240
@@ -49,7 +49,7 @@ const beastsData = [
         id: 6,
         name: "Beast 6",
         affinity: "agl",
-        image: "../assets/images/icons/Elementalys Beasts - Logo.png",
+        image: "../assets/images/icons/elementalys-beasts-logo.png",
         hp: "1,300",
         atk: 330,
         def: 220
