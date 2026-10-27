@@ -1,3 +1,9 @@
+const btnMenuPlay = document.getElementById("btn-play");
+
+btnMenuPlay.addEventListener("DOMContentLoaded", () => {
+  
+});
+
 /* ============================================================
  * Elementalys Battle - Gestión de Sesión en Menú Principal
  * ============================================================ */
