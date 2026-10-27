@@ -1,6 +1,7 @@
 import { initializeApp } from "https://esm.sh/firebase/app";
 import { getAnalytics } from "https://esm.sh/firebase/analytics";
 import { getAuth } from "https://esm.sh/firebase/auth";
+import { getFirestore } from "https://esm.sh/firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCMjyZ5gMH57KmbtzHzebvUDKJhlDI7-sk",
@@ -16,3 +17,4 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 export const auth = getAuth(app);
+export const db = getFirestore(app);
