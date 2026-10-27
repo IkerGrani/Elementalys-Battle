@@ -54,6 +54,7 @@ function cargarCombate() {
     document.getElementById("battle").innerHTML = `
         <div class="creature-window enemy">
             <div class="creature-placeholder ${enemigo.tipo}"></div>
+            <img class="creature-img" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
             <span class="creature-name">${enemigo.nombre}</span>
             <div class="creature-stats">
                 <span>HP: ${enemigo.vida}</span>
@@ -65,6 +66,7 @@ function cargarCombate() {
 
         <div class="creature-window player">
             <div class="creature-placeholder ${jugador.tipo}"></div>
+            <img class="creature-img" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
             <span class="creature-name">${jugador.nombre}</span>
             <div class="creature-stats">
                 <span>HP: ${jugador.vida}</span>
