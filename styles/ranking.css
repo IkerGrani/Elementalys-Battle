@@ -139,7 +139,7 @@ main {
     gap: 20px;
 }
 
-.ranking-section-header {
+.ranking-header {
     display: flex;
     /* Alinea el primer elemento al inicio y el ultimo al final */
     justify-content: space-between;
@@ -154,7 +154,7 @@ main {
 }
 
 /* Botones del header del section */
-.btn {
+.btn-action {
     /* inline-flex: 
         "Exteriormete" se comporta como inline
         "Interiormente* se comporta como flex */
