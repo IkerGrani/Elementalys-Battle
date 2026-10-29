@@ -130,6 +130,7 @@ main {
 
     /* Centra el catalogo horizontalmente dentro del main */
     margin: 0 auto;
+    padding: 0 15px;
 
     display: flex;
     flex-direction: column;
@@ -141,6 +142,7 @@ main {
     /* Alinea el primer elemento al inicio y el ultimo al final */
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
 
     /* Quitar borde, shadow y color de fondo*/
     border: none;
@@ -150,6 +152,15 @@ main {
     padding-bottom: 10px;
 
     text-transform: uppercase;
+}
+
+.ranking-header h2 {
+    flex: 1;
+
+    color: var(--texto-panel-destacado);
+
+    letter-spacing: 2px;
+    text-align: center;
 }
 
 /* Botones del header del section */
@@ -178,20 +189,20 @@ main {
 }
 
 /* Efecto al pasar el curso en ambos boton */
-.btn:hover {
+.btn-action:hover {
     background-color: var(--fondo-menu-hover);
     color: var(--texto);
     border-color: var(--borde-menu-hover);
 }
 
 /* Boton volver */
-.ranking-header a.btn:hover {
+.ranking-header a.btn-action:hover {
     /* Desplazamiento en el eje horizontal */
     transform: translateX(-3px);
 }
 
 /* Boton reset */
-.ranking-header button.btn:hover {
+.ranking-header button.btn-action:hover {
     /* Desplazamiento en el eje horizontal */
     transform: translateX(3px);
 }
@@ -213,6 +224,8 @@ main {
 
 .ranking-table {
     width: 100%;
+    /* Ancho minimo para que en pantallas mas pequeñas la tabla no se aplaste */
+    min-width: 580px;
     
     /* Fusiona o unifica los bordes de las celdas en este tabla */
     border-collapse: collapse;
@@ -352,3 +365,5 @@ footer {
     /* Linea superior que separa el footer del contenido */
     border-top: 1px solid var(--footer-border);
 }
+
+/* ===== RESPONSIVE ADAPTIVE (Media Queries) ===== */
