@@ -126,7 +126,7 @@ main {
     width: 100%;
     /* Limita el ancho maximo para unas 6 cartas 
         para que en pantallas anchas no ocupen todo el ancho */
-    max-width: 1300px;
+    max-width: 1000px;
 
     /* Centra el catalogo horizontalmente dentro del main */
     margin: 0 auto;
