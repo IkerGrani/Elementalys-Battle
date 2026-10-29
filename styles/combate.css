@@ -177,3 +177,61 @@ footer { grid-area: footer; }
   padding: 10px;
   min-height: 120px;
 }
+
+/*
+====================================================================================================
+|                                                                                                  |
+|                                          Animaciones                                             |
+|                                                                                                  |
+====================================================================================================
+*/
+
+/* --- 1. Ataque Normal (Placaje) --- */
+.anim-atacar-player {
+    animation: placajePlayer 0.4s ease-in-out;
+}
+.anim-atacar-enemy {
+    animation: placajeEnemy 0.4s ease-in-out;
+}
+
+@keyframes placajePlayer {
+    0%   { transform: translate(0, 0); }
+    40%  { transform: translate(30px, -20px); } /* Se lanza hacia el enemigo */
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes placajeEnemy {
+    0%   { transform: translate(0, 0); }
+    40%  { transform: translate(-30px, 20px); } /* Se lanza hacia el jugador */
+    100% { transform: translate(0, 0); }
+}
+
+/* --- 2. Recibir Daño (Sacudida y Parpadeo) --- */
+.anim-recibir-daño {
+    animation: recibirDaño 0.5s linear;
+}
+
+@keyframes recibirDaño {
+    0%, 100% { transform: translate(0, 0); filter: brightness(1); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-8px, 0); filter: brightness(0.2) sepia(1) hue-rotate(-50deg); } /* Rojo/Oscuro */
+    20%, 40%, 60%, 80% { transform: translate(8px, 0); filter: brightness(1.5); }
+}
+
+/* --- 3. Ataque Especial (Rayo / Kamehameha) --- */
+.rayo-especial {
+    position: absolute;
+    height: 25px; /* Ligeramente más grueso para que destaque */
+    background: linear-gradient(to bottom, #fff, var(--color-rayo, #3a86ff), var(--color-rayo, #00b4d8), #fff);
+    box-shadow: 0 0 20px var(--color-rayo, #3a86ff), 0 0 40px var(--color-rayo, #00b4d8);
+    border-radius: 10px;
+    z-index: 10;
+    transform-origin: left center;
+    animation: lanzarRayo 0.6s ease-out forwards;
+}
+
+@keyframes lanzarRayo {
+    0% { width: 0; opacity: 1; transform: scaleY(0.3); }
+    30% { width: 120%; opacity: 1; transform: scaleY(1.5); }
+    80% { width: 120%; opacity: 0.8; transform: scaleY(1); }
+    100% { width: 120%; opacity: 0; transform: scaleY(0); }
+}

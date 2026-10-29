@@ -177,6 +177,8 @@ async function comprobarDerrotaORelevoEnemigo() {
     if (indiceSiguienteEnemigo === -1) {
         document.getElementById("evento").innerText = "¡Has derrotado a todo el equipo enemigo! ¡Has ganado el combate! 🏆";
         ocultarTodo();
+        await esperar(5000);
+        window.location.href = '../index.html';
     } else {
         const txtEvento = document.getElementById("evento");
         await esperar(1500);
@@ -273,49 +275,141 @@ async function efectuarCambio(indice) {
             return;
         }
     await esperar(1500);
+    }
+    regresarMenuCombate();
 }
-regresarMenuCombate();
+
+async function ejecutarAnimacionAtaque(esJugadorAtacante, esElemental, beastAtacante) {
+    const ventanas = document.querySelectorAll('.creature-window');
+    // Según tu CSS: ventanas[0] es Enemy (.enemy), ventanas[1] es Player (.player)
+    const atacanteDOM = esJugadorAtacante ? ventanas[1] : ventanas[0];
+    const defensorDOM = esJugadorAtacante ? ventanas[0] : ventanas[1];
+
+    if (esElemental) {
+        // --- LÓGICA DEL RAYO (KAMEHAMEHA) ---
+        const rayo = document.createElement('div');
+        rayo.classList.add('rayo-especial');
+
+        // Mapeo de colores según la afinidad/tipo de la criatura
+        const coloresTipos = {
+            AGL: '#00b4d8', // Azul / Agilidad
+            STR: '#ff4d4d', // Rojo / Fuerza
+            TEQ: '#ffcc00', // Amarillo-Dorado / Técnica
+            PHY: '#cfd8e0', // Blanco-Gris / Físico
+            INT: '#a349a4'  // Morado / Inteligencia
+        };
+
+        // Asignamos el color basado en el tipo del atacante (por defecto azul si no se encuentra)
+        const colorHex = coloresTipos[beastAtacante.tipo] || '#3a86ff';
+        rayo.style.setProperty('--color-rayo', colorHex);
+
+        // Calcular posiciones relativas de centro a centro
+        const rectAtacante = atacanteDOM.getBoundingClientRect();
+        const rectDefensor = defensorDOM.getBoundingClientRect();
+        const rectBattle = document.getElementById('battle').getBoundingClientRect();
+
+        const xInicio = (rectAtacante.left + rectAtacante.width / 2) - rectBattle.left;
+        const yInicio = (rectAtacante.top + rectAtacante.height / 2) - rectBattle.top;
+        
+        const xFin = (rectDefensor.left + rectDefensor.width / 2) - rectBattle.left;
+        const yFin = (rectDefensor.top + rectDefensor.height / 2) - rectBattle.top;
+        
+        const angulo = Math.atan2(yFin - yInicio, xFin - xInicio) * (180 / Math.PI);
+
+        rayo.style.left = `${xInicio}px`;
+        rayo.style.top = `${yInicio}px`;
+        rayo.style.transform = `rotate(${angulo}deg)`;
+
+        document.getElementById('battle').appendChild(rayo);
+
+        // El rayo viaja e impacta a los 0.2s
+        await esperar(200);
+        defensorDOM.classList.add('anim-recibir-daño');
+        
+        await esperar(400);
+        rayo.remove();
+        defensorDOM.classList.remove('anim-recibir-daño');
+
+    } else {
+        // --- LÓGICA DEL PLACAJE (NORMAL) ---
+        const clasePlacaje = esJugadorAtacante ? 'anim-atacar-player' : 'anim-atacar-enemy';
+        
+        atacanteDOM.classList.add(clasePlacaje);
+        
+        // Impacto a mitad de animación física
+        await esperar(200);
+        defensorDOM.classList.add('anim-recibir-daño');
+        
+        await esperar(300);
+        atacanteDOM.classList.remove(clasePlacaje);
+        defensorDOM.classList.remove('anim-recibir-daño');
+    }
 }
+
+
 async function turno(ataque) {
-faseAtaque();
-const jugador = beastJugador[0];
-const enemigo = beastEnemigo[0];
-const txtEvento = document.getElementById("evento");
-// --- TURNO DEL JUGADOR ---
-txtEvento.innerText = "¡${jugador.nombre} usó ${ataque.nombre}!";
-var dañoAlEnemigo = calcularDaño(jugador, enemigo, ataque.esElemental);
-enemigo.vida -= dañoAlEnemigo;
-if (enemigo.vida < 0) enemigo.vida = 0;
-console.log("Daño al enemigo: " + dañoAlEnemigo);
-await esperar(1000);
-actualizarVidaEnemigo();
-if (enemigo.vida <= 0) {
-enemigo.debilitado = true;
-txtEvento.innerText = "¡El ${enemigo.nombre} salvaje se ha debilitado!";
-// MODIFICADO: Ahora comprueba si al enemigo le quedan más aliados para sacarlos a combatir
-await comprobarDerrotaORelevoEnemigo();
-return;
+    faseAtaque();
+    const jugador = beastJugador[0];
+    const enemigo = beastEnemigo[0];
+    const txtEvento = document.getElementById("evento");
+
+    // ==========================================
+    // --- FASE 1: TURNO DEL JUGADOR ---
+    // ==========================================
+    txtEvento.innerText = `¡${jugador.nombre} usó ${ataque.nombre}!`;
+    await esperar(600); // Pequeña pausa dramática antes del golpe
+
+    // 1. Ejecutar animación del jugador atacando (Pasamos el objeto 'jugador')
+    await ejecutarAnimacionAtaque(true, ataque.esElemental, jugador);
+
+    // 2. Calcular y aplicar daño mecánico al enemigo
+    var dañoAlEnemigo = calcularDaño(jugador, enemigo, ataque.esElemental);
+    enemigo.vida -= dañoAlEnemigo;
+    if (enemigo.vida < 0) enemigo.vida = 0;
+    
+    // 3. Actualizar la barra justo en el impacto
+    actualizarVidaEnemigo();
+
+    if (enemigo.vida <= 0) {
+        enemigo.debilitado = true;
+        txtEvento.innerText = `¡El ${enemigo.nombre} salvaje se ha debilitado!`;
+        await comprobarDerrotaORelevoEnemigo();
+        return; // Finaliza la ejecución si el enemigo muere
+    }
+
+    await esperar(1000);
+
+    // ==========================================
+    // --- FASE 2: TURNO DEL ENEMIGO ---
+    // ==========================================
+    txtEvento.innerText = `¡El ${enemigo.nombre} salvaje usa Placaje!`;
+    await esperar(600);
+
+    // 1. Ejecutar animación del enemigo atacando (Pasamos false porque no es el jugador, false por físico, y el objeto 'enemigo')
+    await ejecutarAnimacionAtaque(false, false, enemigo);
+
+    // 2. Calcular y aplicar daño mecánico al jugador
+    var dañoAlJugador = calcularDaño(enemigo, jugador, false);
+    jugador.vida -= dañoAlJugador;
+    if (jugador.vida < 0) jugador.vida = 0;
+    
+    // 3. Actualizar la interfaz del jugador
+    actualizarVidaJugador();
+
+    if (jugador.vida <= 0) {
+        jugador.debilitado = true;
+        txtEvento.innerText = `¡Tu ${jugador.nombre} se ha debilitado!`;
+        await esperar(1500);
+        comprobarDerrotaORelevo();
+        return;
+    }
+
+    await esperar(1500);
+
+    // --- FIN DEL TURNO ---
+    regresarMenuCombate();
 }
-await esperar(1500);
-// --- TURNO DEL ENEMIGO ---
-txtEvento.innerText = "¡El ${enemigo.nombre} salvaje usa Placaje!";
-var dañoAlJugador = calcularDaño(enemigo, jugador, false);
-jugador.vida -= dañoAlJugador;
-if (jugador.vida < 0) jugador.vida = 0;
-console.log("Daño al jugador: " + dañoAlJugador);
-await esperar(1000);
-actualizarVidaJugador();
-if (jugador.vida <= 0) {
-jugador.debilitado = true;
-txtEvento.innerText = "¡Tu ${jugador.nombre} se ha debilitado!";
-await esperar(1500);
-comprobarDerrotaORelevo();
-return;
-}
-await esperar(1500);
-// --- FIN DEL TURNO ---
-regresarMenuCombate();
-}
+
 // --- LISTENERS Y MANEJO DE INTERFAZ ---
 btnAtk1.addEventListener("click", () => {
 turno({ nombre: "Placaje", esElemental: false });
