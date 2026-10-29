@@ -123,9 +123,6 @@ main {
 
 /* ===== SECCION RANKING ===== */
 .ranking-section {
-    /* Temporal */
-    color: white;
-
     width: 100%;
     /* Limita el ancho maximo para unas 6 cartas 
         para que en pantallas anchas no ocupen todo el ancho */
@@ -151,6 +148,8 @@ main {
     background-color: transparent;
 
     padding-bottom: 10px;
+
+    text-transform: uppercase;
 }
 
 /* Botones del header del section */
@@ -195,6 +194,147 @@ main {
 .ranking-header button.btn:hover {
     /* Desplazamiento en el eje horizontal */
     transform: translateX(3px);
+}
+
+/* ===== TABLA Y CONTENEDORES ===== */
+.table-container {
+    width: 100%;
+
+    background-color: var(--fondo-tarjeta);
+    
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+
+    padding: 12px;
+
+    /* Scroll horizontal adicional para la tabla en pantallas mas estrechas */
+    overflow-x: auto;
+}
+
+.ranking-table {
+    width: 100%;
+    
+    /* Fusiona o unifica los bordes de las celdas en este tabla */
+    border-collapse: collapse;
+
+    color: var(--texto);
+
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+/* Ocultar caption pero mantener para lectores de pantalla (sin hacer) */
+.ranking-table caption {
+    padding-bottom: 12px;
+}
+
+/* Cabecera de la tabla */
+.ranking-table thead tr {
+    background-color: var(--table-header);
+
+    border-bottom: 2px solid var(--borde-header);
+}
+
+.ranking-table th {
+    color: var(--texto-header);
+
+    padding: 14px 18px;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.8rem;
+}
+
+/* Filas de la tabla */
+.ranking-table-body tr {
+    border-bottom: 1px solid var(--texto-panel-destacado);
+    /* transition: background-color 0.2s ease; */
+}
+
+.ranking-table-body tr:hover {
+    background-color: var(--table-header-hover);
+}
+
+.ranking-table-body td {
+    padding: 12px 18px;
+
+    vertical-align: middle;
+}
+
+/* Celdas puesto */
+.col-rank {
+    width: 100px;
+
+    color: var(--texto-tarjeta-destacado);
+
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Celda del jugador con la imagen por defecto */
+.player-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Imagen asociada al jugador */
+.player-avatar {
+    width: 36px;
+    height: 36px;
+
+    border: 1px solid var(--borde-header);
+    border-radius: 4px;
+
+    background-color: var(--fondo-avatar);
+
+    /* El contenido mantiene la relacion aspecto mientras se rellena el cuadro */
+    object-fit: cover;
+
+    /* Inpide que la imagen se reduzca */
+    flex-shrink: 0;
+}
+
+/* Nombre del jugador */
+.player-name {
+    color: var(--texto);
+
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Numero de victorias */
+.col-victories {
+    width: 150px;
+
+    color: var(--texto-menu-principal);
+
+    font-weight: bold;  
+}
+
+/* Fecha y hora a la que se consiguio tal puntuacion */
+.col-date {
+    width: 200px;
+
+    color: var(--texto-footer);
+
+    font-size: 0.85rem;
+}
+
+/* Colores diferentes para el top 3 jugadores del ranking */
+.ranking-table-body tr:nth-child(1) .player-name { 
+    color: var(--table-rank-1-text); 
+    text-shadow: 0 0 6px var(--table-tank-1-text-shadow);
+}
+
+.ranking-table-body tr:nth-child(2) .player-name { 
+    color: var(--table-rank-2-text); 
+    text-shadow: 0 0 6px var(--table-tank-2-text-shadow);
+}
+
+.ranking-table-body tr:nth-child(3) .player-name { 
+    color: var(--table-rank-3-text); 
+    text-shadow: 0 0 6px var(--table-tank-3-text-shadow);
 }
 
 /* ===== FOOTER ===== */
