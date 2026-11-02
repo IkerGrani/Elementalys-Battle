@@ -1,5 +1,5 @@
 /* ===== DATOS CRIATURAS (Ejemplo de JSON/Array) ===== */
-const beastsData = [
+const BEASTS_DATA = [
     {
         id: 1,
         name: "Beast 1",
@@ -120,4 +120,4 @@ function renderBeastCatalog(beasts) {
 }
 
 // Ejecutamos la funcion cuando documento HTML este cargado
-document.addEventListener("DOMContentLoaded", () => renderBeastCatalog(beastsData));
+document.addEventListener("DOMContentLoaded", () => renderBeastCatalog(BEASTS_DATA));

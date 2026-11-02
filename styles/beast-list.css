@@ -126,10 +126,11 @@ main {
     width: 100%;
     /* Limita el ancho maximo para unas 6 cartas 
         para que en pantallas anchas no ocupen todo el ancho */
-    max-width: 1300px;
+    max-width: 1000px;
 
     /* Centra el catalogo horizontalmente dentro del main */
     margin: 0 auto;
+    padding: 0 15px;
 
     display: flex;
     flex-direction: column;
@@ -363,16 +364,44 @@ footer {
 
 /* ===== RESPONSIVE ADAPTIVE (Media Queries) ===== */
 
-/* Menos de 900px: 2 columnas x 3 filas */
-@media (max-width: 900px) {
+/* Menos de 768px: 2 columnas x 3 filas */
+@media (max-width: 768px) {
+    .catalog-header {
+        /* Permite que el contador salte de línea si el título es largo */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
     .beasts-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 }
 
-/* Menos de 600px: 1 columna x 6 filas */
-@media (max-width: 600px) {
+/* Menos de 480px: 1 columna x 6 filas */
+@media (max-width: 480px) {
+    /* Cabecera de la pagina mas pequeño */
+    header {
+        height: auto;
+        flex-direction: column;
+    }
+
+    #logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .title-container h1 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .title-container p {
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
     .beasts-grid {
         grid-template-columns: repeat(1, 1fr);
         gap: 15px;
