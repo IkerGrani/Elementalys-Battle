@@ -57,7 +57,7 @@ function cargarCombate() {
     document.getElementById("battle").innerHTML = `
         <div class="creature-window enemy">
             <div class="creature-tipe">${enemigo.tipo}</div>
-            <img class="creature-img" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
+            <img class="creature-img anim-entrada anim-espera" id="enemigoImg" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
             <span class="creature-name">${enemigo.nombre}</span>
             <div class="creature-stats">
                 <span>HP: ${enemigo.vida}</span>
@@ -69,7 +69,7 @@ function cargarCombate() {
 
         <div class="creature-window player">
             <div class="creature-tipe">${jugador.tipo}</div>
-            <img class="creature-img" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
+            <img class="creature-img anim-entrada anim-espera" id="jugadorImg" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
             <span class="creature-name">${jugador.nombre}</span>
             <div class="creature-stats">
                 <span>HP: ${jugador.vida}</span>
@@ -327,11 +327,14 @@ async function turno(ataque) {
     const enemigo = beastEnemigo[0];
     const txtEvento = document.getElementById("evento");
 
+    const jugadorImg = document.getElementById("jugadorImg");
+    const enemigoImg = document.getElementById("enemigoImg")
+
     // ==========================================
     // --- FASE 1: TURNO DEL JUGADOR ---
     // ==========================================
     txtEvento.innerText = `¡${jugador.nombre} usó ${ataque.nombre}!`;
-    await esperar(600); // Pequeña pausa dramática antes del golpe
+    await esperar(600);
 
     // 1. Ejecutar animación del jugador atacando (Pasamos el objeto 'jugador')
     await ejecutarAnimacionAtaque(true, ataque.esElemental, jugador);
@@ -347,6 +350,8 @@ async function turno(ataque) {
     if (enemigo.vida <= 0) {
         enemigo.debilitado = true;
         txtEvento.innerText = `¡El ${enemigo.nombre} salvaje se ha debilitado!`;
+        enemigoImg.classList.add("anim-muerte");
+        await esperar(2000);
         await comprobarDerrotaORelevoEnemigo();
         return;
     }
@@ -373,7 +378,8 @@ async function turno(ataque) {
     if (jugador.vida <= 0) {
         jugador.debilitado = true;
         txtEvento.innerText = `¡Tu ${jugador.nombre} se ha debilitado!`;
-        await esperar(1500);
+        jugadorImg.classList.add("anim-muerte");
+        await esperar(2000);
         comprobarDerrotaORelevo();
         return;
     }
@@ -386,12 +392,12 @@ async function turno(ataque) {
 
 // --- LISTENERS Y MANEJO DE INTERFAZ ---
 btnAtk1.addEventListener("click", () => {
-turno({ nombre: "Placaje", esElemental: false });
-console.log("Ataque 1");
+    turno({ nombre: "Placaje", esElemental: false });
+    console.log("Ataque 1");
 });
 btnAtk2.addEventListener("click", () => {
-turno({ nombre: "Rayo Elemental", esElemental: true });
-console.log("Ataque 2");
+    turno({ nombre: "Rayo Elemental", esElemental: true });
+    console.log("Ataque 2");
 });
 function ocultarTodo() {
 btnLuchar.hidden = true;
