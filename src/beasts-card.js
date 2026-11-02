@@ -69,7 +69,7 @@ function createBeastCard(beast) {
         <article class="beast-card">
             <!-- Cabecera de la tarjeta: Nombre y Atributo -->
             <div class="card-header">
-                <h3 class="beast-name">${beast.name}}</h3>
+                <h3 class="beast-name">${beast.name}</h3>
                 <span class="beast-affinity ${beast.affinity}">${beast.affinity.toUpperCase()}</span>
             </div>
             <!-- Marco de la imagen de la criatura -->
