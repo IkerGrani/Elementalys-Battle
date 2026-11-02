@@ -177,8 +177,9 @@ main {
     border: 2px solid var(--borde-panel-seccion);
     border-radius: 4px;
 
-    
-    padding: 6px 14px;
+    /* Fijamos al misma altura para todos los botones de esta clase */
+    height: 38px;
+    padding: 0 16px;
 
     /* Elimina el subrayado del enlace */
     text-decoration: none;
@@ -284,6 +285,11 @@ main {
     text-align: center;
 }
 
+/* Jugador y su imagen (contenedor padre)*/
+.col-player {
+    width: 150px;
+}
+
 /* Celda del jugador con la imagen por defecto */
 .player-cell {
     display: flex;
@@ -318,7 +324,7 @@ main {
 
 /* Numero de victorias */
 .col-victories {
-    width: 150px;
+    width: 200px;
 
     color: var(--texto-menu-principal);
 
@@ -367,3 +373,51 @@ footer {
 }
 
 /* ===== RESPONSIVE ADAPTIVE (Media Queries) ===== */
+/* Pantallas "medianas" (menos de 768px) */
+@media (max-width: 768px) {
+    .ranking-header {
+        /* Permite que el titulo ocupe su propia línea si no cabe */
+        flex-wrap: wrap;
+    }
+
+    .ranking-header h2 {
+        /* Sitúa el titulo arriba del todo */
+        order: -1;      
+    }
+}
+
+/* Pantallas "pequeñas" (menos de 480px) */
+@media (max-width: 480px) {
+    /* Cabecera de la pagina mas pequeño */
+    header {
+        height: auto;
+        flex-direction: column;
+    }
+
+    #logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .title-container h1 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .title-container p {
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    /* Menos padding y gap en la tabla para ver mejor en pantallas pequeñas*/
+    .ranking-section {
+        padding: 0 10px;
+        gap: 15px;
+    }
+
+    .player-avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+}
