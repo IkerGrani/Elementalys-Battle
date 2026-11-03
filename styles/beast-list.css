@@ -281,11 +281,11 @@ main {
 }
 
 /* Colores dependiendo del atributo que tenga la criatura */
-.beast-affinity.agl { background-color: var(--fondo-gema-agilidad); }
-.beast-affinity.str { background-color: var(--fondo-gema-fuerza); }
-.beast-affinity.teq { background-color: var(--fondo-gema-tecnica); }
-.beast-affinity.phy { background-color: var(--fondo-gema-fisico); }
-.beast-affinity.int { background-color: var(--fondo-gema-inteligencia); }
+.beast-affinity.agl { background-color: var(--tipo-agl); }
+.beast-affinity.str { background-color: var(--tipo-str); }
+.beast-affinity.teq { background-color: var( --tipo-teq); }
+.beast-affinity.phy { background-color: var(--tipo-phy); }
+.beast-affinity.int { background-color: var(--tipo-int); }
 
 /* Marco contenedor de la imagen */
 .card-image-wrapper {
