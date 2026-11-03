@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking</title>
+    <link rel="icon" href="../assets/images/icons/elementalys-beasts-logo.png" type="image/png">
+    <link rel="stylesheet" href="../styles/colores.css">
+    <link rel="stylesheet" href="../styles/ranking.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="../assets/images/icons/elementalys-beasts-logo.png" alt="Brazalete Sendokai" id="logo">
+        </div>
+        <div class="title-container">
+            <h1>Elementalys Beasts</h1>
+            <p>Battle</p>
+        </div>
+    </header>
+    <main>
+        <!-- Seccion princiapl del ranking -->
+        <section class="ranking-section">
+            <!-- Encabezado de la sección: titulo-->
+            <header class="ranking-header">
+                <!-- Enlace a la pagina de inicio -->
+                <a href="../index.html" class="btn-action" title="Volver al menú principal">
+                    <span>&#11013;</span> VOLVER
+                </a>
+                <!-- Titulo principal de la seccion -->
+                <h2>Top 10 jugadores</h2>
+                <!-- Boton para resetear/borrar el ranking -->
+                <button id="btn-reset-ranking" class="btn-action" type="button" title="Reiniciar datos del ranking">
+                    RESET
+                </button>
+            </header>
+            <!-- Contenerdor para la tabla -->
+            <div class="table-container">
+                <!-- Tabla del ranking -->
+                <!-- aria-live="polite": Segun el estandar de accesibilidad, avisa a los lectores de 
+                pantalla que el contenido dentro de este contenedor puede cambiar dinamicamente -->
+                <table class="ranking-table" aria-live="polite">
+                    <!-- Titulo descriptivo para la tabla -->
+                    <caption>Ranking</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Puesto</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Puntos (V/D)</th>
+                            <th scope="col">Fecha y hora</th>
+                        </tr>
+                    </thead>
+                    <tbody class="ranking-table-body">
+                        <!-- Se agregara dinamicamente lso valores de la tabla mediante el DOM -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>Elementalys Beasts: Battle &copy; 2026 - Versión Alpha 1.0</p>
+    </footer>
+    <!-- Script de logica para la creación del ranking -->
+    <script src="../src/ranking.js"></script>
+</body>
+</html>
