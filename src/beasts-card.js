@@ -15,9 +15,6 @@ async function loadBeastCatalog() {
     BEASTS_DATA.push(...beasts);
 }
 
-
-
-
 /* ===== FUNCION PARA LA TARJETA DE CADA BEAST ===== */
 /**
  * Convierte un objeto beast en una cadena HTML con las clases css 
