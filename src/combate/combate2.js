@@ -1,0 +1,441 @@
+import { BeastDAO } from '../dao/beastDAO.js';
+
+const btnLuchar = document.getElementById("ataques");
+const btnAtk1 = document.getElementById("atk1");
+const btnAtk2 = document.getElementById("atk2");
+const btnVolver = document.getElementById("volver");
+const btnCambiar = document.getElementById("cambiar");
+const teamPanel = document.getElementById("team");
+
+let catalogoBeasts = [];
+let beastJugador = [];
+let beastEnemigo = [];
+
+function elegirBeasts() {
+    const equipo = [];
+
+    for (let i = 0; i < 3; i++) {
+        const indiceAleatorio = Math.floor(
+            Math.random() * catalogoBeasts.length
+        );
+        const beastClonada = { ...catalogoBeasts[indiceAleatorio] };
+        
+        if (!beastClonada.vidaMax) {
+            beastClonada.vidaMax = beastClonada.vida;
+        }
+        equipo.push(beastClonada);
+    }
+
+    return equipo;
+}
+
+async function elegirEquipos() {
+    try {
+        catalogoBeasts = await BeastDAO.obtenerTodos();
+        console.log("Criaturas cargadas:", catalogoBeasts);
+
+        beastJugador = elegirBeasts();
+        beastEnemigo = elegirBeasts();
+    } catch (error) {
+        console.error("Error al cargar las criaturas:", error);
+        throw error;
+    }
+}
+
+function cargarCombate(quienEntrada = "ambos") {
+    const jugador = beastJugador[0];
+    const enemigo = beastEnemigo[0];
+
+    if (!jugador || !enemigo) {
+        console.error("No se pudieron cargar las criaturas del combate.");
+        return;
+    }
+
+    // Solo la criatura que está entrando hace el salto de entrada.
+    // La que ya está en el campo conserva su postura (solo animación de espera).
+    const entradaJugador = (quienEntrada === "ambos" || quienEntrada === "jugador") ? "anim-entrada" : "";
+    const entradaEnemigo = (quienEntrada === "ambos" || quienEntrada === "enemigo") ? "anim-entrada" : "";
+
+    // La barra de HP refleja la vida actual (sobreviviente) y no se resetea al rebuild.
+    const pctEnemigo = enemigo.vidaMax ? Math.max(0, (enemigo.vida / enemigo.vidaMax) * 100) : 100;
+    const pctJugador = jugador.vidaMax ? Math.max(0, (jugador.vida / jugador.vidaMax) * 100) : 100;
+
+    document.getElementById("evento").innerText =
+        `¡Un ${enemigo.nombre} salvaje aparece!`;
+
+    document.getElementById("battle").innerHTML = `
+        <div class="creature-window enemy">
+            <div class="creature-tipe ${enemigo.tipo.toLowerCase()}"><span>${enemigo.tipo}</span></div>
+            <img class="creature-img ${entradaEnemigo} anim-espera" id="enemigoImg" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
+            <span class="creature-name">${enemigo.nombre}</span>
+            <div class="creature-stats">
+                <span>HP: ${Math.floor(enemigo.vida)}</span>
+                <div class="hp-bar">
+                    <div class="hp-fill" style="width: ${pctEnemigo}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="creature-window player">
+            <div class="creature-tipe ${jugador.tipo.toLowerCase()}"><span>${jugador.tipo}</span></div>
+            <img class="creature-img ${entradaJugador} anim-espera" id="jugadorImg" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
+            <span class="creature-name">${jugador.nombre}</span>
+            <div class="creature-stats">
+                <span>HP: ${Math.floor(jugador.vida)}</span>
+                <div class="hp-bar">
+                    <div class="hp-fill" style="width: ${pctJugador}%"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function iniciarCombate() {
+    await elegirEquipos();
+
+    console.log("Equipo del jugador:", beastJugador);
+    console.log("Equipo del enemigo:", beastEnemigo);
+
+    cargarCombate("ambos");
+}
+
+iniciarCombate();
+
+
+function calcularDaño(beastAtacante, beastDefensor, esElemental) {
+    var dañoSimple = beastAtacante.ataque + Math.floor(Math.random() * beastAtacante.ataque) - beastDefensor.defensa;
+    var multiplicador = 1.0; 
+
+    if (esElemental) {
+        const multiplicadoresTipos = {
+            AGL: { AGL: 1, STR: 1.5, TEQ: 0.5, PHY: 0.5, INT: 1.5 }, 
+            STR: { STR: 1, PHY: 1.5, AGL: 0.5, INT: 0.5, TEQ: 1.5 }, 
+            PHY: { PHY: 1, INT: 1.5, STR: 0.5, TEQ: 0.5, AGL: 1.5 }, 
+            INT: { INT: 1, TEQ: 1.5, PHY: 0.5, STR: 0.5, AGL: 1.5 }, 
+            TEQ: { TEQ: 1, AGL: 1.5, INT: 0.5, STR: 0.5, PHY: 1.5 }  
+        };
+
+        const elTipoDelAtacante = beastAtacante.tipo;
+        const elTipoDelDefensor = beastDefensor.tipo;
+        
+        multiplicador = (multiplicadoresTipos[elTipoDelAtacante] && multiplicadoresTipos[elTipoDelAtacante][elTipoDelDefensor]) || 1.0;
+    }
+    var dañoFinal = dañoSimple * multiplicador;
+
+    return Math.max(1, Math.floor(dañoFinal));
+}
+
+// Función auxiliar para pausar el código (simular el tiempo de las animaciones)
+const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Función para actualizar visualmente la vida en el HTML
+function actualizarVidaJugador() {
+    const jugador = beastJugador[0];
+    const porcentajeJugador = Math.max(0, (jugador.vida / (jugador.vidaMax || 100)) * 100);
+    const ventanas = document.querySelectorAll('.creature-window');
+
+    ventanas[1].querySelector('.creature-stats span').innerText = `HP: ${Math.floor(jugador.vida)}`;
+    ventanas[1].querySelector('.hp-fill').style.width = `${porcentajeJugador}%`;
+}
+
+function actualizarVidaEnemigo() {
+    const enemigo = beastEnemigo[0];
+    const porcentajeEnemigo = Math.max(0, (enemigo.vida / (enemigo.vidaMax || 100)) * 100);
+    const ventanas = document.querySelectorAll('.creature-window');
+    
+    ventanas[0].querySelector('.creature-stats span').innerText = `HP: ${Math.floor(enemigo.vida)}`;
+    ventanas[0].querySelector('.hp-fill').style.width = `${porcentajeEnemigo}%`;
+}
+
+function regresarMenuCombate() {
+    btnLuchar.disabled = false;
+    btnCambiar.disabled = false;
+    btnLuchar.hidden = false;
+    btnCambiar.hidden = false;
+    btnAtk1.hidden = true;
+    btnAtk2.hidden = true;
+    btnVolver.hidden = true;
+    teamPanel.hidden = true;
+    document.getElementById("evento").innerText = `¿Qué debería hacer ${beastJugador[0].nombre}?`;
+}
+
+function comprobarDerrotaORelevo() {
+    const quedanVivos = beastJugador.some(beast => !beast.debilitado && beast.vida > 0);
+
+    if (!quedanVivos) {
+        document.getElementById("evento").innerText = "¡Ya no te quedan criaturas utilizables! Has perdido el combate. 💀";
+        ocultarTodo();
+    } else {
+        mostrarPanelCambio();
+    }
+}
+
+async function comprobarDerrotaORelevoEnemigo() {
+    const indiceSiguienteEnemigo = beastEnemigo.findIndex(beast => !beast.debilitado && beast.vida > 0);
+
+    if (indiceSiguienteEnemigo === -1) {
+        document.getElementById("evento").innerText = "¡Has derrotado a todo el equipo enemigo! ¡Has ganado el combate! 🏆";
+        ocultarTodo();
+        await esperar(5000);
+        window.location.href = '../index.html';
+    } else {
+        const txtEvento = document.getElementById("evento");
+        await esperar(1500);
+
+        const temp = beastEnemigo[0];
+        beastEnemigo[0] = beastEnemigo[indiceSiguienteEnemigo];
+        beastEnemigo[indiceSiguienteEnemigo] = temp;
+
+        // Solo la criatura recién enviada hace el salto de entrada; el jugador ya está en el campo.
+        cargarCombate("enemigo");
+        txtEvento.innerText = `¡El entrenador enemigo envía a ${beastEnemigo[0].nombre} al combate!`;
+        
+        await esperar(2000);
+        regresarMenuCombate();
+    }
+}
+
+function mostrarPanelCambio() {
+    ocultarTodo();
+    teamPanel.innerHTML = ""; 
+    teamPanel.hidden = false;
+    btnVolver.hidden = false; 
+
+    if (beastJugador[0].vida <= 0) {
+        btnVolver.hidden = true;
+    }
+
+    document.getElementById("evento").innerText = "Selecciona una criatura para combatir:";
+
+    for (let i = 0; i < beastJugador.length; i++) {
+        const beast = beastJugador[i];
+        
+        if (i === 0) continue;
+
+        if (!beast.debilitado && beast.vida > 0) {
+            const btnBeast = document.createElement("button");
+            btnBeast.className = "btn-team-member";
+            btnBeast.style.margin = "5px"; 
+            btnBeast.innerHTML = `${beast.nombre} (HP: ${Math.floor(beast.vida)}/${beast.vidaMax})`;
+            
+            btnBeast.addEventListener("click", () => {
+                efectuarCambio(i);
+            });
+            
+            teamPanel.appendChild(btnBeast);
+        }
+    }
+}
+
+async function efectuarCambio(indice) {
+    teamPanel.hidden = true;
+    btnVolver.hidden = true;
+    
+    const txtEvento = document.getElementById("evento");
+    const estabaVivoElActual = beastJugador[0].vida > 0;
+    
+    if (estabaVivoElActual) {
+        txtEvento.innerText = `¡Vuelve ${beastJugador[0].nombre}!`;
+        await esperar(1200);
+    }
+
+    const temp = beastJugador[0];
+    beastJugador[0] = beastJugador[indice];
+    beastJugador[indice] = temp;
+
+    // Solo la criatura recién enviada hace el salto de entrada; el enemigo ya está en el campo.
+    cargarCombate("jugador");
+    txtEvento.innerText = `¡Adelante ${beastJugador[0].nombre}!`;
+    await esperar(1500);
+
+    if (estabaVivoElActual) {
+        txtEvento.innerText = `¡El ${beastEnemigo[0].nombre} salvaje aprovecha tu cambio para atacar!`;
+        await esperar(1200);
+        
+        txtEvento.innerText = `¡El ${beastEnemigo[0].nombre} salvaje usa Placaje!`;
+        var dañoAlJugador = calcularDaño(beastEnemigo[0], beastJugador[0], false); 
+        beastJugador[0].vida -= dañoAlJugador;
+        if (beastJugador[0].vida < 0) beastJugador[0].vida = 0;
+        
+        await esperar(1000); 
+        actualizarVidaJugador();
+
+        if (beastJugador[0].vida <= 0) {
+            beastJugador[0].debilitado = true;
+            txtEvento.innerText = `¡Tu ${beastJugador[0].nombre} se ha debilitado!`;
+            await esperar(1500);
+            comprobarDerrotaORelevo();
+            return;
+        }
+        await esperar(1500);
+    }
+    regresarMenuCombate();
+}
+
+async function ejecutarAnimacionAtaque(esJugadorAtacante, esElemental, beastAtacante) {
+    const ventanas = document.querySelectorAll('.creature-window');
+    const atacanteDOM = esJugadorAtacante ? ventanas[1] : ventanas[0];
+    const defensorDOM = esJugadorAtacante ? ventanas[0] : ventanas[1];
+
+    if (esElemental) {
+        const rayo = document.createElement('div');
+        rayo.classList.add('rayo-especial');
+
+        const coloresTipos = {
+            AGL: '#00b4d8',
+            STR: '#ff4d4d', 
+            TEQ: '#15ff00', 
+            PHY: '#d9ff00', 
+            INT: '#a349a4'  
+        };
+
+        const colorHex = coloresTipos[beastAtacante.tipo] || '#3a86ff';
+        rayo.style.setProperty('--color-rayo', colorHex);
+
+        const rectAtacante = atacanteDOM.getBoundingClientRect();
+        const rectDefensor = defensorDOM.getBoundingClientRect();
+        const rectBattle = document.getElementById('battle').getBoundingClientRect();
+
+        const xInicio = (rectAtacante.left + rectAtacante.width / 2) - rectBattle.left;
+        const yInicio = (rectAtacante.top + rectAtacante.height / 2) - rectBattle.top;
+        
+        const xFin = (rectDefensor.left + rectDefensor.width / 2) - rectBattle.left;
+        const yFin = (rectDefensor.top + rectDefensor.height / 2) - rectBattle.top;
+        
+        const angulo = Math.atan2(yFin - yInicio, xFin - xInicio) * (180 / Math.PI);
+
+        rayo.style.left = `${xInicio}px`;
+        rayo.style.top = `${yInicio}px`;
+        rayo.style.transform = `rotate(${angulo}deg)`;
+
+        document.getElementById('battle').appendChild(rayo);
+
+        await esperar(200);
+        defensorDOM.classList.add('anim-recibir-daño');
+        
+        await esperar(400);
+        rayo.remove();
+        defensorDOM.classList.remove('anim-recibir-daño');
+
+    } else {
+        const clasePlacaje = esJugadorAtacante ? 'anim-atacar-player' : 'anim-atacar-enemy';
+        
+        atacanteDOM.classList.add(clasePlacaje);
+        
+        await esperar(200);
+        defensorDOM.classList.add('anim-recibir-daño');
+        
+        await esperar(300);
+        atacanteDOM.classList.remove(clasePlacaje);
+        defensorDOM.classList.remove('anim-recibir-daño');
+    }
+}
+
+
+async function turno(ataque) {
+    faseAtaque();
+    const jugador = beastJugador[0];
+    const enemigo = beastEnemigo[0];
+    const txtEvento = document.getElementById("evento");
+
+    const jugadorImg = document.getElementById("jugadorImg");
+    const enemigoImg = document.getElementById("enemigoImg")
+
+    // ==========================================
+    // --- FASE 1: TURNO DEL JUGADOR ---
+    // ==========================================
+    txtEvento.innerText = `¡${jugador.nombre} usó ${ataque.nombre}!`;
+    await esperar(600);
+
+    // 1. Ejecutar animación del jugador atacando (Pasamos el objeto 'jugador')
+    await ejecutarAnimacionAtaque(true, ataque.esElemental, jugador);
+
+    // 2. Calcular y aplicar daño mecánico al enemigo
+    var dañoAlEnemigo = calcularDaño(jugador, enemigo, ataque.esElemental);
+    enemigo.vida -= dañoAlEnemigo;
+    if (enemigo.vida < 0) enemigo.vida = 0;
+    
+    // 3. Actualizar la barra justo en el impacto
+    actualizarVidaEnemigo();
+
+    if (enemigo.vida <= 0) {
+        enemigo.debilitado = true;
+        txtEvento.innerText = `¡El ${enemigo.nombre} salvaje se ha debilitado!`;
+        enemigoImg.classList.add("anim-muerte");
+        await esperar(2000);
+        await comprobarDerrotaORelevoEnemigo();
+        return;
+    }
+
+    await esperar(1000);
+
+    // ==========================================
+    // --- FASE 2: TURNO DEL ENEMIGO ---
+    // ==========================================
+    txtEvento.innerText = `¡El ${enemigo.nombre} salvaje usa Placaje!`;
+    await esperar(600);
+
+    // 1. Ejecutar animación del enemigo atacando (Pasamos false porque no es el jugador, false por físico, y el objeto 'enemigo')
+    await ejecutarAnimacionAtaque(false, false, enemigo);
+
+    // 2. Calcular y aplicar daño mecánico al jugador
+    var dañoAlJugador = calcularDaño(enemigo, jugador, false);
+    jugador.vida -= dañoAlJugador;
+    if (jugador.vida < 0) jugador.vida = 0;
+    
+    // 3. Actualizar la interfaz del jugador
+    actualizarVidaJugador();
+
+    if (jugador.vida <= 0) {
+        jugador.debilitado = true;
+        txtEvento.innerText = `¡Tu ${jugador.nombre} se ha debilitado!`;
+        jugadorImg.classList.add("anim-muerte");
+        await esperar(2000);
+        comprobarDerrotaORelevo();
+        return;
+    }
+
+    await esperar(1500);
+
+    // --- FIN DEL TURNO ---
+    regresarMenuCombate();
+}
+
+// --- LISTENERS Y MANEJO DE INTERFAZ ---
+btnAtk1.addEventListener("click", () => {
+    turno({ nombre: "Placaje", esElemental: false });
+    console.log("Ataque 1");
+});
+btnAtk2.addEventListener("click", () => {
+    turno({ nombre: "Rayo Elemental", esElemental: true });
+    console.log("Ataque 2");
+});
+function ocultarTodo() {
+btnLuchar.hidden = true;
+btnCambiar.hidden = true;
+btnAtk1.hidden = true;
+btnAtk2.hidden = true;
+btnVolver.hidden = true;
+teamPanel.hidden = true;
+}
+function faseAtaque() {
+ocultarTodo();
+btnLuchar.disabled = true;
+btnCambiar.disabled = true;
+}
+btnLuchar.addEventListener("click", () => {
+    btnLuchar.hidden = true;
+    btnCambiar.hidden = true;
+    btnAtk1.hidden = false;
+    btnAtk2.hidden = false;
+    btnVolver.hidden = false;
+    document.getElementById("evento").innerText = "¿Qué debería hacer ${beastJugador[0].nombre}?";
+});
+
+btnCambiar.addEventListener("click", () => {
+mostrarPanelCambio();
+});
+
+btnVolver.addEventListener("click", () => {
+regresarMenuCombate();
+});
