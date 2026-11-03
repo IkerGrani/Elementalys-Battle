@@ -65,7 +65,7 @@ function cargarCombate(quienEntrada = "ambos") {
 
     document.getElementById("battle").innerHTML = `
         <div class="creature-window enemy">
-            <div class="creature-tipe">${enemigo.tipo}</div>
+            <div class="creature-tipe ${enemigo.tipo.toLowerCase()}"><span>${enemigo.tipo}</span></div>
             <img class="creature-img ${entradaEnemigo} anim-espera" id="enemigoImg" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
             <span class="creature-name">${enemigo.nombre}</span>
             <div class="creature-stats">
@@ -77,7 +77,7 @@ function cargarCombate(quienEntrada = "ambos") {
         </div>
 
         <div class="creature-window player">
-            <div class="creature-tipe">${jugador.tipo}</div>
+            <div class="creature-tipe ${jugador.tipo.toLowerCase()}"><span>${jugador.tipo}</span></div>
             <img class="creature-img ${entradaJugador} anim-espera" id="jugadorImg" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
             <span class="creature-name">${jugador.nombre}</span>
             <div class="creature-stats">

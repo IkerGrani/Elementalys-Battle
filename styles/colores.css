@@ -3,6 +3,13 @@
     --principal: #23241a;
     --color-secundario: #e8c547;
 
+/* Colores por tipo de beast */
+    --tipo-agl: #0066ff;      /* Azul - Agilidad */
+    --tipo-str: #ff2244;      /* Rojo - Fuerza */
+    --tipo-teq: #00aa00;      /* Verde - Técnica */
+    --tipo-phy: #ffdd00;      /* Amarillo - Físico */
+    --tipo-int: #aa22ff;      /* Morado - Inteligencia */
+
     /* Fondos */
     --fondo-body: #060712;
     --fondo-menu-1: #1a0b2e;
