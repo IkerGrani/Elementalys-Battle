@@ -1,18 +1,18 @@
-import { auth } from "../firebase.js";
-import { collection, getDocs } from "https://esm.sh/firebase/firestore";
+import { auth, db } from "../firebase.js";
 import { 
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    updateProfile
+    signOut
 } from "https://esm.sh/firebase/auth";
 import { 
-    getFirestore,
+    collection,
     doc,
     setDoc,
     getDoc,
+    getDocs,
+    updateDoc,
     Timestamp
 } from "https://esm.sh/firebase/firestore";
-import { db } from "../firebase.js";
 import { User } from '../objetos/user.js';
 
 export class UserDAO {
@@ -24,17 +24,22 @@ export class UserDAO {
      * 
      * @param {string} uid UID del usuario.
      * @param {string} email Identificador del usuario.
-     * @returns Retorna el objeto User con los datos de firebase. Si no se encuentras devuelve false.
+     * @returns Retorna el objeto User con los datos de firebase. Si no se encuentras devuelve null.
      */
-    async getUserByUid(uid, email = "") {
-        const docRef = doc(db, "Usuarios", uid);
-        const docSnap = await getDoc(docRef);
+    static async getUserByUid(uid, email = "") {
+        try {
+            const docRef = doc(db, "Usuarios", uid);
+            const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            return User.createUserFromFireBase(docSnap.data(), uid, email);
+            if (docSnap.exists()) {
+                return User.createUserFromFireBase(uid, email, docSnap.data());
+            }
+
+            return null;   
+        } catch (error) {
+            console.error("Error al obtener el usuario por UID:", error);
+            throw error;
         }
-
-        return false;
     }
 
     /**
@@ -46,51 +51,127 @@ export class UserDAO {
      * @param {string} password Constraseña del usuario.
      * @returns Retorna el objeto User de firebase.
      */
-    async login(email, password) {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        // Comprobar si las credenciales son correctas
-        if (!userCredential) return false;
-        const firebaseUser = userCredential.user;
+    static async login(email, password) {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const firebaseUser = userCredential.user;
 
-        // Se obtiene el documento ("Usuarios") asociado al usuario logeado
-        let user = await getUserByUid(firebaseUser.uid, firebaseUser.email);
-        // Si el usuario o el documento al usuario no existe devolvemos false
-        if (!user) return false;
+            // Se obtiene el documento ("Usuarios") asociado al usuario logeado
+            let user = await UserDAO.getUserByUid(firebaseUser.uid, firebaseUser.email);
 
-        return user;
-    }
-
-    async register(email, password, usuario, fechaNacimiento) {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const firebaseUser = userCredential.user;
-
-        const newUser = new User({
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            usuario: usuario,
-            fechaNacimiento: fechaNacimiento,
-            partidasJugadas: 0,
-            partidasGanadas: 0,
-            fechaUltimaPartida: Timestamp.now()
-        });
-
-        return newUser;
+            return user;   
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+            throw error;
+        }
     }
 
     /**
+     * Funcion para registrar al nuevo usuario en firebase.
+     * Se crea el usuario firebase auth y el documento "Usuarios" asociado en firestore.
+     * @param {string} email Correo electronico.
+     * @param {string} password Contraseña.
+     * @param {string} usuario Nombre de usuario.
+     * @param {string} fechaNacimiento Fecha de nacimiento.
+     * @returns Objeto User creado.
+     */
+    static async register(email, password, usuario, fechaNacimiento) {
+        try {
+            // Se crea el usuario en firebase auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const firebaseUser = userCredential.user;
+
+            // Se crea una nuevo objeto User
+            const newUser = new User(
+                firebaseUser.uid,
+                firebaseUser.email,
+                usuario,
+                fechaNacimiento,
+                0,
+                0,
+                Timestamp.now()
+            );
+
+            // Guardamos los datos en la colección "Usuarios" de firestore
+            await UserDAO.saveUser(newUser);
+
+            return newUser;
+        } catch (error) {
+            console.error("Error al registrar usuario:", error);
+            throw error;
+        }
+    }
+
+    /**
+     * Se guarda o se sobrescribe los datos del usuario en el documento "Usuarios".
+     * @param {User} user Objeto user.
+     */
+    static async saveUser(user) {
+        try {
+            const userRef = doc(db, "Usuarios", user.uid);
+            await setDoc(userRef, user.toFirebase(), { merge: true });   
+        } catch (error) {
+            console.error("Error al guardar datos del usuario:", error);
+            throw error;
+        }
+    }
+
+    /**
+     * Actualiza datos del perfil del usuario(nombre y fecha de nacimiento).
      * 
-     * @param {*} user 
+     * @param {string} uid Identificador del usuario para actualizar.
+     * @param {string} usuario Nuevo nombre de usuario.
+     * @param {string} fechaNacimiento Nueva fecha de nacimiento.
      */
-    async saveUser(user) {
-        const userRef = doc(db, "Usuarios", user.uid);
-        await setDoc(userRef, user.toFiresbase(), { merge: true });
+    static async updateProfileData(uid, usuario, fechaNacimiento) {
+        try {
+            const userRef = doc(db, "Usuarios", uid);
+            
+            // Actualizar en Firestore
+            await updateDoc(userRef, {
+                Usuario: usuario,
+                Fecha_Nacimiento: fechaNacimiento
+            });
+
+        } catch (error) {
+            console.error("Error al actualizar el perfil:", error);
+            throw error;
+        }
     }
 
     /**
-     * Funcion para cerrar sesion
+     * Se obtiene todos los usuarios de firebase (para la pantalla ranking).
+     * 
+     * @returns {<Array<User>} Lista con todos los usuarios.
      */
-    async logout() {
-        await signOut(auth);
+    static async getAllUsers() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "Usuarios"));
+            const users = [];
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                // Le pasamos el id del documento como uid
+                users.push(User.createUserFromFireBase(docSnap.id, "", data));
+            });
+
+            return users;
+        } catch (error) {
+            console.error("Error al obtener todos los usuarios:", error);
+            return [];
+        }
+    }
+
+    /**
+     * Funcion para cerrar sesion en firebase.
+     */
+    static async logout() {
+       try {
+            await signOut(auth);
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+            throw error;
+        }
     }
 
 }
