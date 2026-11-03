@@ -11,7 +11,7 @@
 }
 
 .anim-espera {
-    animation: respiracionPlatino 3.5s ease-in-out infinite;
+    animation: respiracionPlatino 3.5s ease-in-out forwards;
 }
 
 .anim-muerte {

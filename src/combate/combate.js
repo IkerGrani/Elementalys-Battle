@@ -42,7 +42,7 @@ async function elegirEquipos() {
     }
 }
 
-function cargarCombate() {
+function cargarCombate(quienEntrada = "ambos") {
     const jugador = beastJugador[0];
     const enemigo = beastEnemigo[0];
 
@@ -51,30 +51,39 @@ function cargarCombate() {
         return;
     }
 
+    // Solo la criatura que está entrando hace el salto de entrada.
+    // La que ya está en el campo conserva su postura (solo animación de espera).
+    const entradaJugador = (quienEntrada === "ambos" || quienEntrada === "jugador") ? "anim-entrada" : "";
+    const entradaEnemigo = (quienEntrada === "ambos" || quienEntrada === "enemigo") ? "anim-entrada" : "";
+
+    // La barra de HP refleja la vida actual (sobreviviente) y no se resetea al rebuild.
+    const pctEnemigo = enemigo.vidaMax ? Math.max(0, (enemigo.vida / enemigo.vidaMax) * 100) : 100;
+    const pctJugador = jugador.vidaMax ? Math.max(0, (jugador.vida / jugador.vidaMax) * 100) : 100;
+
     document.getElementById("evento").innerText =
         `¡Un ${enemigo.nombre} salvaje aparece!`;
 
     document.getElementById("battle").innerHTML = `
         <div class="creature-window enemy">
             <div class="creature-tipe">${enemigo.tipo}</div>
-            <img class="creature-img anim-entrada anim-espera" id="enemigoImg" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
+            <img class="creature-img ${entradaEnemigo} anim-espera" id="enemigoImg" src="../assets/images/characters/${enemigo.imagen}" alt="${enemigo.nombre}">
             <span class="creature-name">${enemigo.nombre}</span>
             <div class="creature-stats">
-                <span>HP: ${enemigo.vida}</span>
+                <span>HP: ${Math.floor(enemigo.vida)}</span>
                 <div class="hp-bar">
-                    <div class="hp-fill" style="width: 100%"></div>
+                    <div class="hp-fill" style="width: ${pctEnemigo}%"></div>
                 </div>
             </div>
         </div>
 
         <div class="creature-window player">
             <div class="creature-tipe">${jugador.tipo}</div>
-            <img class="creature-img anim-entrada anim-espera" id="jugadorImg" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
+            <img class="creature-img ${entradaJugador} anim-espera" id="jugadorImg" src="../assets/images/characters/${jugador.imagen}" alt="${jugador.nombre}">
             <span class="creature-name">${jugador.nombre}</span>
             <div class="creature-stats">
-                <span>HP: ${jugador.vida}</span>
+                <span>HP: ${Math.floor(jugador.vida)}</span>
                 <div class="hp-bar">
-                    <div class="hp-fill" style="width: 100%"></div>
+                    <div class="hp-fill" style="width: ${pctJugador}%"></div>
                 </div>
             </div>
         </div>
@@ -87,7 +96,7 @@ async function iniciarCombate() {
     console.log("Equipo del jugador:", beastJugador);
     console.log("Equipo del enemigo:", beastEnemigo);
 
-    cargarCombate();
+    cargarCombate("ambos");
 }
 
 iniciarCombate();
@@ -177,7 +186,8 @@ async function comprobarDerrotaORelevoEnemigo() {
         beastEnemigo[0] = beastEnemigo[indiceSiguienteEnemigo];
         beastEnemigo[indiceSiguienteEnemigo] = temp;
 
-        cargarCombate();
+        // Solo la criatura recién enviada hace el salto de entrada; el jugador ya está en el campo.
+        cargarCombate("enemigo");
         txtEvento.innerText = `¡El entrenador enemigo envía a ${beastEnemigo[0].nombre} al combate!`;
         
         await esperar(2000);
@@ -233,7 +243,8 @@ async function efectuarCambio(indice) {
     beastJugador[0] = beastJugador[indice];
     beastJugador[indice] = temp;
 
-    cargarCombate();
+    // Solo la criatura recién enviada hace el salto de entrada; el enemigo ya está en el campo.
+    cargarCombate("jugador");
     txtEvento.innerText = `¡Adelante ${beastJugador[0].nombre}!`;
     await esperar(1500);
 
@@ -251,12 +262,12 @@ async function efectuarCambio(indice) {
 
         if (beastJugador[0].vida <= 0) {
             beastJugador[0].debilitado = true;
-            txtEvento.innerText = "¡Tu ${beastJugador[0].nombre} se ha debilitado!";
+            txtEvento.innerText = `¡Tu ${beastJugador[0].nombre} se ha debilitado!`;
             await esperar(1500);
             comprobarDerrotaORelevo();
             return;
         }
-    await esperar(1500);
+        await esperar(1500);
     }
     regresarMenuCombate();
 }
