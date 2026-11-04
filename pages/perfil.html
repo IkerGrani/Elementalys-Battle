@@ -11,10 +11,9 @@
         <link rel="stylesheet" href="../styles/colores.css">
         <link rel="stylesheet" href="../styles/menu.css">
         <link rel="stylesheet" href="../styles/login.css">
+        <link rel="stylesheet" href="../styles/perfil.css">
         <!-- Fin Styles -->
 
-        <script src="../src/login/formulario.js" defer></script>
-        <script src="../src/login/login.js" type="module"></script>
         <script src="../src/login/perfil.js" type="module"></script>
     </head>
 
@@ -36,29 +35,26 @@
         </header>
         
         <section class="main-content">
-
             <div id="formulario">
                 <div id="mostrar-formulario">
-                    <!--
-                    <button type="button" id="mostrar-login" class="btnFormulario activo">Login</button>
-                    <button type="button" id="mostrar-registro" class="btnFormulario">Registrarse</button>
-                    -->
-                    <button type="button" id="mostrar-registro" class="motrar-perfil">Editar Perfil</button>
+                    <button type="button" class="btnFormulario activo">Editar Perfil</button>
                 </div>
-                <form id="form-perfil" hidden>
-                    <label for="usuario-registro">Usuario*</label>
-                    <input type="text" id="usuario-registro" name="usuario">
 
-                    <label for="mail">Correo electrónico*</label>
-                    <input type="email" id="mail" name="mail">
+                <form id="form-perfil">
+                    <label for="usuario-perfil">Nombre de usuario</label>
+                    <input type="text" id="usuario-perfil" name="usuario" required>
 
-                    <label for="passwd-registro">Contraseña*</label>
-                    <input type="password" id="passwd-registro" name="passwd">
+                    <label for="mail-perfil">Correo electrónico</label>
+                    <input type="email" id="mail-perfil" name="mail" readonly>
 
-                    <label for="fecha-nacimiento">Fecha de Nacimiento</label>
-                    <input type="date" id="fecha-nacimiento" name="fechaNacimiento">
+                    <label for="passwd-perfil">Contraseña</label>
+                    <input type="password" id="passwd-perfil" value="********" readonly>
 
-                    <button type="submit" class="btnLogin">Registrarse</button>
+                    <label for="fecha-nacimiento-perfil">Fecha de Nacimiento</label>
+                    <input type="date" id="fecha-nacimiento-perfil" name="fechaNacimiento">
+
+                    <button type="submit" class="btnLogin">Guardar Cambios</button>
+                    <button type="button" id="btn-volver" class="btnVolver">Volver</button>
                 </form>
             </div>
         </section>

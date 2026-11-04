@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Comprobar si han pasado los 3 días de expiración
   if (ahora > sesion.expira) {
     sessionStorage.removeItem("usuarioSesion");
+    sessionStorage.removeItem(SESSION_ATTEMPTS_KEY);
+    localStorage.removeItem(RANKING_RESET_FLAG);
     mostrarBotonLogin(playerInfoContainer, statsOverviewContainer);
     return;
   }
@@ -80,8 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
     btnLogout.addEventListener("click", async () => {
       await UserDAO.logout();
       sessionStorage.removeItem("usuarioSesion");
-      sessionStorage.removeItem("SESSION_ATTEMPTS_KEY");
-      localStorage.removeItem("RANKING_RESET_FLAG");
+      sessionStorage.removeItem(SESSION_ATTEMPTS_KEY);
+      localStorage.removeItem(RANKING_RESET_FLAG);
       window.location.reload();
     });
   }
