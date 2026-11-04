@@ -1,64 +1,12 @@
-/*
-<!-- Datos de prueba -->
-<tr>
-    <td class="col-rank">1</td>
-    <td class="col-player">
-        <!-- Contender para agrupar al jugador con su avatar y nombre -->
-        <div class="player-cell">
-            <img src="../assets/images/icons/elementalys-beasts-logo.png" 
-                alt="Avatar del jugador" class="player-avatar" />
-            <span class="player-name">Nombre</span>
-        </div>
-    </td>
-    <td class="col-victories">50</td>
-    <td class="col-date">27/10/2026 17:20</td>
-</tr>
-<tr>
-    <td class="col-rank">2</td>
-    <td class="col-player">
-        <!-- Contender para agrupar al jugador con su avatar y nombre -->
-        <div class="player-cell">
-            <img src="../assets/images/icons/elementalys-beasts-logo.png" 
-                alt="Avatar del jugador" class="player-avatar" />
-            <span class="player-name">Nombre</span>
-        </div>
-    </td>
-    <td class="col-victories">50</td>
-    <td class="col-date">27/10/2026 17:20</td>
-</tr>
-<tr>
-    <td class="col-rank">3</td>
-    <td class="col-player">
-        <!-- Contender para agrupar al jugador con su avatar y nombre -->
-        <div class="player-cell">
-            <img src="../assets/images/icons/elementalys-beasts-logo.png" 
-                alt="Avatar del jugador" class="player-avatar" />
-            <span class="player-name">Nombre</span>
-        </div>
-    </td>
-    <td class="col-victories">50</td>
-    <td class="col-date">27/10/2026 17:20</td>
-</tr>
-                        <tr>
-    <td class="col-rank">4</td>
-    <td class="col-player">
-        <!-- Contender para agrupar al jugador con su avatar y nombre -->
-        <div class="player-cell">
-            <img src="../assets/images/icons/elementalys-beasts-logo.png" 
-                alt="Avatar del jugador" class="player-avatar" />
-            <span class="player-name">Nombre</span>
-        </div>
-    </td>
-    <td class="col-victories">50</td>
-    <td class="col-date">27/10/2026 17:20</td>
-</tr>
-*/
+import { UserDAO } from "./dao/userDAO.js";
 
 /* ===== CONSTANTES GLOBALES ===== */
-const RANKING_RESET_FLAG = "elementalys_ranking_reset_flag";
-const PLAYER_AVATAR_SRC = "../assets/images/icons/elementalys-beasts-logo.png" 
 
-/* ===== DATOS JUFADORES (Ejemplo de JSON/Array) ===== */
+const RANKING_RESET_FLAG = "elementalys_ranking_reset_flag";
+const PLAYER_AVATAR_SRC = "../assets/images/icons/avatar.png" 
+
+/* ===== DATOS JUFADORES RESPALDO ===== */
+
 const PLAYER_DATA = [
     { name: "ShadowIgnis", victories: 52, defeats: 12, datetime: "29/10/2026 16:45" },
     { name: "Valerya_K", victories: 45, defeats: 18, datetime: "29/10/2026 15:10" },
@@ -77,10 +25,35 @@ const PLAYER_DATA = [
     { name: "RookieBeast", victories: 5, defeats: 20, datetime: "20/10/2026 09:15" }
 ];
 
-/* ===== SOLICITAR DATOS ===== */
+/* ===== UTILIDADES DE FORMATEO ===== */
+
 /**
- * Consulta los datos del ranking. Es decir a la base de datos.
- * @returns {Promise<Array<Object>>} Colección de todos los jugadores.
+ * Convierte un Timestamp de firebase a formato: DD/MM/YYYY - HH:mm (04/04/2001 - 12:09)
+ * 
+ * @param {Object} timestamp Objeto Timestamp de Firebase.
+ * @returns {string} Fecha formateada o texto indicando que no tiene partidas.
+ */
+function formatDate(timestamp) {
+    if (!timestamp) return "Sin partidas";
+
+    const date = timestamp.toDate();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${day}/${month}/${year} - ${hours}:${minutes}`;
+}
+
+/* ===== SOLICITAR DATOS ===== */
+
+/**
+ * Consulta los datos del ranking mediante UserDAO.
+ * Si el usuario activo el reset, devuelve lista vacia simulada.
+ * 
+ * @returns {Promise<Array<Object>>} Colección de todos los jugadores 
+ * o array vacio si se dio al boton reset.
  */
 async function getRankingData() {
     /**
@@ -89,15 +62,31 @@ async function getRankingData() {
      * El jugador volvera a ver puntuacion una vez termine una partida.
      */
     const isReset = localStorage.getItem(RANKING_RESET_FLAG);
+    console.log(isReset);
     if (isReset === "true") return [];
 
-    // Simulamos una repusta de una llamada externa
-    return new Promise((resolve => {
-        setTimeout(() => {
-            resolve([...PLAYER_DATA])
-        }, 100 );
-    }));
+    try {
+        // Obtenemos todos los usuarios de firebase
+        const users = await UserDAO.getAllUsers();
 
+        // Mapeamos el User al formato del ranking
+        return users.map((user) => {
+            const victories = user.partidasGanadas;
+            const played = user.partidasJugadas;
+            // Se calcula las derrotas: jugadas - ganadas (min 0)
+            const defeats = Math.max(0, played - victories);
+
+            return {
+                name: user.usuario,
+                victories: victories,
+                defeats: defeats,
+                datetime: formatDate(user.fechaUltimaPartida)
+            };
+        });
+    } catch (error) {
+        console.error("Error al obtener los datos de Firestore en getRankingData:", error);
+        return [];
+    }
 }
 
 /* ===== LÓGICA ===== */
@@ -189,7 +178,7 @@ async function loadAndRenderRanking() {
         const data = await getRankingData();
         const top10 = processTop10Ranking(data);
 
-        // Si la tabla está reseteada o no tiene registros
+        // Si la tabla esta reseteada o no tiene registros
         if (top10.length === 0) {
             tbody.innerHTML = `
                 <tr>
@@ -201,7 +190,7 @@ async function loadAndRenderRanking() {
             return;
         }
     
-        // Inyección dinámica en el DOM
+        // Creacion en el DOM
         tbody.innerHTML = top10
             .map((player, index) => createRanking(player, index + 1))
             .join("");
@@ -239,20 +228,8 @@ function resetButton() {
     });
 }
 
-/* Funcion para reactivar el ranking.
-
-function recordBattleResult(playerName, hasWon) {
-    const RESET_FLAG_KEY = "elementalys_ranking_reset_flag";
-
-    // Si el ranking estaba reseteado, eliminamos la bandera para reactivarlo
-    if (localStorage.getItem(RESET_FLAG_KEY) === "true") {
-        localStorage.removeItem(RESET_FLAG_KEY);
-    }
-    console.log(`Partida guardada para ${playerName}. Ranking reactivado.`);
-}
-*/
-
 /* ===== INICIALIZACIÓN ===== */
+
 document.addEventListener("DOMContentLoaded", () => {
     loadAndRenderRanking();
     resetButton();

@@ -89,7 +89,7 @@ export class UserDAO {
                 fechaNacimiento,
                 0,
                 0,
-                Timestamp.now()
+                null
             );
 
             // Guardamos los datos en la colección "Usuarios" de firestore
