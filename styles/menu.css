@@ -215,6 +215,12 @@ aside {
   position: relative;
 }
 
+.avatar-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .rank-badge {
   position: absolute;
   bottom: -6px;

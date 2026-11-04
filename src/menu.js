@@ -1,3 +1,8 @@
+import { UserDAO } from './dao/userDAO.js';
+
+const RANKING_RESET_FLAG = "elementalys_ranking_reset_flag";
+const SESSION_ATTEMPTS_KEY = "elementalys_session_attempts";
+
 const btnMenuPlay = document.getElementById("btn-play");
 
 btnMenuPlay.addEventListener("DOMContentLoaded", () => {
@@ -30,13 +35,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Si la sesión es válida, cargamos los datos de Firestore guardados en sessionStorage
+  /*
   const nombreUsuario = sesion.Usuario || sesion.email || "Jugador";
   const partidasJugadas = sesion["Partidas Jugadas"] ?? 0;
   const partidasGanadas = sesion["Partidas Ganadas"] ?? 0;
+  */
+  const nombreUsuario = sesion.Usuario || "Jugador";
+  const partidasJugadas = sesion.Partidas_Jugadas;
+  const partidasGanadas = sesion.Partidas_Ganadas;
 
   // Actualizar Nombre de Usuario
   playerInfoContainer.innerHTML = `
-    <div class="avatar-slot"></div>
+    <div class="avatar-slot">
+      <img src="../assets/images/icons/avatar.png" alt="Avatar del jugador"/>
+    </div>
     <div class="player-details">
       <p class="player-name">${nombreUsuario}</p>
       <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
@@ -57,8 +69,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Botón para cerrar sesión
   const btnLogout = document.getElementById("btn-logout");
   if (btnLogout) {
-    btnLogout.addEventListener("click", () => {
+    btnLogout.addEventListener("click", async () => {
+      await UserDAO.logout();
       sessionStorage.removeItem("usuarioSesion");
+      sessionStorage.removeItem("SESSION_ATTEMPTS_KEY");
+      localStorage.removeItem("RANKING_RESET_FLAG");
       window.location.reload();
     });
   }
@@ -66,7 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function mostrarBotonLogin(infoContainer, statsContainer) {
   infoContainer.innerHTML = `
-    <div class="avatar-slot"></div>
+    <div class="avatar-slot">
+    </div>
     <div class="player-details">
       <p class="player-name"><a href="pages/login.html" class="login-link">Iniciar Sesión</a></p>
       <p class="element-affinity">Invitado</p>
