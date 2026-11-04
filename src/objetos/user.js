@@ -1,3 +1,5 @@
+import { Timestamp } from "https://esm.sh/firebase/firestore";
+
 export class User {
 
     constructor(uid, email, usuario, fechaNacimiento, partidasJugadas, partidasGanadas, fechaUltimaPartida) {
@@ -74,6 +76,6 @@ export class User {
         if (victory) {
             this.partidasGanadas += 1;
         }
-        this.fechaUltimaPartida = new Date();
+        this.fechaUltimaPartida = Timestamp.now();
     }
 }

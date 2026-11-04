@@ -2,6 +2,8 @@
  * Importamos las clases necesarias para poder obtener los Beasts de Firebase,
  * asi como de la clase definida para manejar a cada Beast con sus estadisticas.
  */
+import { User } from '../objetos/user.js';
+import { UserDAO } from '../dao/userDAO.js';
 import { BeastDAO } from '../dao/beastDAO.js';
 import { Beast } from '../objetos/beast.js';
 
@@ -61,7 +63,7 @@ function agregarLog(mensaje) {
 function inicializarLog(intento) {
     if (!logContenedor) return;
     logContenedor.innerHTML = `<strong>--- Partida #${intento} ---</strong>`;
-    agregarLog(`Turno ${numeroTurno}: ¡El combate ha comenzado!`);
+    agregarLog(`El combate ha comenzado. ¡El combate ha comenzado!`);
 }
 
 /* ===== SELECCIÓN Y CONFIGURACIÓN DE EQUIPOS ===== */
@@ -98,11 +100,14 @@ async function elegirEquipos() {
 
 /**
  * Funcion para registrar el numero de intentos en la sesion actual (sessionStorage).
+ * 
+ * @returns Numero actual de partida.
  */
 function registrarIntentosSesion() {
     let intentos = Number(sessionStorage.getItem(SESSION_ATTEMPTS_KEY)) || 0;
     intentos += 1;
     sessionStorage.setItem(SESSION_ATTEMPTS_KEY, intentos);
+    return intentos;
 }
 
 
@@ -309,7 +314,8 @@ async function turno(ataque) {
 
     if (!enemigo.estaViva()) {
         txtEvento.innerText = `¡El ${enemigo.nombre} salvaje se ha debilitado!`;
-        agregarLog(`${enemigo.nombre} enemigo se ha debilitado.`);
+        agregarLog(`Turno ${numeroTurno}: <strong>${enemigo.nombre}</strong> enemigo se ha debilitado.`);
+        numeroTurno += 1;
         await comprobarDerrotaORelevoEnemigo();
         return;
     }
@@ -330,7 +336,8 @@ async function turno(ataque) {
 
     if (!jugador.estaViva()) {
         txtEvento.innerText = `¡Tu ${jugador.nombre} se ha debilitado!`;
-        agregarLog(`Tu ${jugador.nombre} ha caído en combate.`);
+        agregarLog(`Turno ${numeroTurno}: Tu <strong>${jugador.nombre}</strong> ha caído en combate.`);
+        numeroTurno += 1;
         await esperar(1500);
         comprobarDerrotaORelevo();
         return;
@@ -406,6 +413,7 @@ async function efectuarCambio(indice) {
     btnVolver.hidden = true;
     
     const estabaVivoElActual = beastJugador[0].estaViva();
+    const nombreAnterior = beastJugador[0].nombre;
     
     if (estabaVivoElActual) {
         txtEvento.innerText = `¡Vuelve ${beastJugador[0].nombre}!`;
@@ -419,7 +427,11 @@ async function efectuarCambio(indice) {
 
     cargarCombate();
     txtEvento.innerText = `¡Adelante ${beastJugador[0].nombre}!`;
-    agregarLog(`Relevo: Entra <strong>${beastJugador[0].nombre}</strong> (${beastJugador[0].tipo}).`);
+    if (estabaVivoElActual) {
+        agregarLog(`Turno ${numeroTurno}: El jugador envía a <strong>${nombreAnterior}</strong>. Y entra <strong>${beastJugador[0].nombre}</strong>.`);
+    } else {
+        agregarLog(`Entra al combate <strong>${beastJugador[0].nombre}</strong>.`);
+    }
     await esperar(1500);
 
     // Si el cambio fue voluntario en medio de la pelea, el rival aprovecha para atacar gratis
@@ -438,7 +450,8 @@ async function efectuarCambio(indice) {
 
         if (!beastJugador[0].estaViva()) {
             txtEvento.innerText = `¡Tu ${beastJugador[0].nombre} se ha debilitado!`;
-            agregarLog(`Tu ${beastJugador[0].nombre} ha caído tras el relevo.`);
+            agregarLog(`Turno ${numeroTurno}: Tu <strong>${beastJugador[0].nombre}</strong> ha caído tras el relevo.`);
+            numeroTurno += 1;
             await esperar(1500);
             comprobarDerrotaORelevo();
             return;
@@ -504,9 +517,25 @@ async function comprobarDerrotaORelevoEnemigo() {
 async function finalizarCombate(jugadorGana) {
     ocultarTodo();
     
-    // Si el ranking estaba reseteado por el cliente, reactivamos la persistencia
-    if (localStorage.getItem(RANKING_RESET_FLAG) === "true") {
-        localStorage.removeItem(RANKING_RESET_FLAG);
+    // Reactivamos el ranking
+    localStorage.removeItem(RANKING_RESET_FLAG);
+
+    // Si hay sesion iniciada, actualizamos las estadísticas del usuario
+    const session = sessionStorage.getItem("usuarioSesion");
+    if (session) {
+        try {
+            const sessionData = JSON.parse(session);
+            const user = User.createUserFromFireBase(sessionData.uid, sessionData.email, sessionData);
+            
+            // Actualizamos victorias y jugadas
+            user.registerMatchResult(jugadorGana);
+
+            // Guardamos en firebase y actualizamos sessionStorage
+            await UserDAO.saveUser(user);
+            sessionStorage.setItem("usuarioSesion", JSON.stringify(user.toSessionObject()));
+        } catch (error) {
+            console.error("Error al actualizar estadisticas del jugador:", error);
+        }
     }
 
     if (jugadorGana) {
