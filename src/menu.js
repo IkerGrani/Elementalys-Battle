@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     <div class="player-details">
       <p class="player-name">${nombreUsuario}</p>
+      <button id="btn-perfil" class="btn-logout">Perfil</button>
       <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
     </div>
   `;
@@ -65,6 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="stat-value">🏆 ${partidasGanadas}</span>
     </div>
   `;
+
+  const btnPerfil = document.getElementById("btn-perfil");
+  if (btnPerfil) {
+    btnPerfil.addEventListener("click", () => {
+      window.location.href = "pages/perfil.html";
+    });
+  }
 
   // Botón para cerrar sesión
   const btnLogout = document.getElementById("btn-logout");
