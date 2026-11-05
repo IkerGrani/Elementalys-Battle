@@ -1,12 +1,32 @@
 import { UserDAO } from './dao/userDAO.js';
 
+const sesionRaw = sessionStorage.getItem("usuarioSesion");
 const RANKING_RESET_FLAG = "elementalys_ranking_reset_flag";
 const SESSION_ATTEMPTS_KEY = "elementalys_session_attempts";
 
 const btnMenuPlay = document.getElementById("btn-play");
+const btnMenuRank = document.getElementById("btn-rank");
+const btnMenuList = document.getElementById("btn-beasts");
+const btnMenuOpciones = document.getElementById("btn-options");
 
-btnMenuPlay.addEventListener("DOMContentLoaded", () => {
-  
+btnMenuPlay.addEventListener("click", () => {
+  if (sesionRaw) {
+    window.location.href = "pages/combate.html"
+  } else {
+    window.location.href = "pages/login.html"
+  }
+});
+
+btnMenuRank.addEventListener("click", () => {
+  window.location.href = "pages/ranking.html"
+});
+
+btnMenuList.addEventListener("click", () => {
+  window.location.href = "pages/beast-list.html"
+});
+
+btnMenuOpciones.addEventListener("click", () => {
+  window.location.href = "pages/opciones.html"
 });
 
 /* ============================================================
@@ -17,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const playerInfoContainer = document.getElementById("player-info-container");
   const statsOverviewContainer = document.getElementById("stats-overview-container");
 
-  const sesionRaw = sessionStorage.getItem("usuarioSesion");
+  //const sesionRaw = sessionStorage.getItem("usuarioSesion");
 
   if (!sesionRaw) {
     mostrarBotonLogin(playerInfoContainer, statsOverviewContainer);
