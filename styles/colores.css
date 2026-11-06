@@ -1,5 +1,13 @@
+@font-face {
+    font-family: 'PokemonClassic';
+    src: url('../assets/fonts/Pokemon-Classic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     /* Principales */
+    --fuente-principal: 'PokemonClassic', 'Courier New', monospace;
     --principal: #23241a;
     --color-secundario: #e8c547;
 

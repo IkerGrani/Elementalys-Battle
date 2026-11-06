@@ -74,10 +74,18 @@ function inicializarLog(intento) {
  */
 function elegirBeasts() {
     const equipo = [];
-    for (let i = 0; i < 3; i++) {
+    while (equipo.length < 3) {
         const indiceAleatorio = Math.floor(Math.random() * catalogoBeasts.length);
+        const beastRand = catalogoBeasts[indiceAleatorio];
+
+        /**
+         * Comprobamos si ya existe esa criatura con ese mismo nombre
+         * .some: devuelte true si algun elemento del array coincide
+         */
+        const beastInTeam = equipo.some(beast => beast.nombre === beastRand.nombre);
+
         // Clonamos el beast seleccionado y se lo asignamos al equipo.
-        equipo.push(catalogoBeasts[indiceAleatorio].clonar());
+        if (!beastInTeam) equipo.push(beastRand.clonar());
     }
     return equipo;
 }
